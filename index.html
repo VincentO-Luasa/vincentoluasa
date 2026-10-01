@@ -532,10 +532,7 @@
 
       <div class="frontiers">
         <article class="frontier frontier--brain reveal" id="brain">
-          <div class="frontier__top">
-            <p class="frontier__kicker">The brain · live simulation</p>
-            <button type="button" class="btn btn--primary btn--sm" data-open-brain>Explore the brain 🧠</button>
-          </div>
+          <p class="frontier__kicker">The brain · live simulation</p>
           <h3>Make a neuron fire</h3>
           <p class="frontier__text">This is the <strong>Hodgkin–Huxley model</strong> (1952), the Nobel-winning equations behind every action potential: sodium rushes in, potassium flows out, and the voltage spikes. Turn up the input current and watch the neuron go from silent to firing rhythmically. Each spike also fires a neuron in this page’s background.</p>
           <div class="hh">
@@ -554,6 +551,10 @@
             <div class="hh__rate"><span>Firing rate</span><strong id="hhRate">0 Hz</strong></div>
           </div>
           <p class="frontier__note">Tip: below about 6 µA/cm² the neuron fires at most once and settles, so give it a zap. Above that, it fires rhythmically, faster the harder you push. The trace runs about 18× slower than real time.</p>
+          <div class="frontier__foot">
+            <button type="button" class="btn btn--primary" data-open-brain>Explore the brain 🧠</button>
+            <p class="frontier__note">Or press <kbd>B</kbd> anywhere.</p>
+          </div>
         </article>
 
         <article class="frontier frontier--cosmos reveal">
@@ -561,8 +562,10 @@
           <h3>Open the sky</h3>
           <p class="frontier__text">A solar system with orbital speeds to scale (Earth takes 24 seconds per lap), 13 constellations, and a fact for every planet. Drag to rotate, scroll to zoom, click a planet to fly to it.</p>
           <canvas id="miniOrrery" class="mini-orrery" aria-hidden="true"></canvas>
-          <button type="button" class="btn btn--primary" data-open-sky>Open the sky ✦</button>
-          <p class="frontier__note">Or press <kbd>S</kbd> anywhere on the site (and <kbd>B</kbd> for a digital brain).</p>
+          <div class="frontier__foot">
+            <button type="button" class="btn btn--primary" data-open-sky>Open the sky ✦</button>
+            <p class="frontier__note">Or press <kbd>S</kbd> anywhere.</p>
+          </div>
         </article>
       </div>
     </section>
