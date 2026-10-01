@@ -7,8 +7,7 @@
    Entrance: the page recedes, stars streak in like a
    hyperspace arrival, the system swings from top-down
    to oblique while orbits trace themselves.
-   Camera: mouse move looks around (yaw/tilt + parallax),
-   drag rotates further, wheel/pinch zooms to the cursor,
+   Camera: drag rotates, wheel/pinch zooms to the cursor,
    clicking a planet flies to it and follows it.
    ────────────────────────────────────────────── */
 (() => {
@@ -59,7 +58,6 @@
   /* Camera: current values ease towards targets every frame */
   const cam = { yaw: 0, tilt: 0.38, zoom: 1, panX: 0, panY: 0 };
   const target = { yaw: 0, tilt: 0.38, zoom: 1, panX: 0, panY: 0 };
-  let lookX = 0, lookY = 0;           // mouse position in [-1, 1], for gentle look-around
   let dragYaw = 0, dragTilt = 0;      // extra rotation accumulated by dragging
   const pointers = new Map();
   let dragMoved = false, pinchDist = 0;
@@ -123,11 +121,10 @@
     const introT = reduceMotion ? 1 : (now - opened) / INTRO_MS;
     const intro = easeOut(introT);
 
-    // Camera: look-around from the mouse + drag, plus follow mode on a selected planet
+    // Camera: drag rotation, plus follow mode on a selected planet
     const k = 1 - Math.pow(0.002, dt);               // frame-rate independent easing
-    const lookYaw = lookX * 0.35, lookTilt = -lookY * 0.18;
-    const wantYaw = target.yaw + dragYaw + lookYaw;
-    const wantTilt = clamp(target.tilt + dragTilt + lookTilt, 0.12, 0.95);
+    const wantYaw = target.yaw + dragYaw;
+    const wantTilt = clamp(target.tilt + dragTilt, 0.12, 0.95);
     cam.yaw = lerp(cam.yaw, wantYaw, k);
     cam.tilt = lerp(cam.tilt, wantTilt, k);
     cam.zoom = lerp(cam.zoom, target.zoom, k);
@@ -148,9 +145,8 @@
     // Background stars: hyperspace streaks during the entrance, then parallax points
     const cx0 = W / 2, cy0 = H / 2;
     const warp = reduceMotion ? 0 : 1 - easeOut(introT * 1.6);
-    const px = -lookX * 18, py = -lookY * 12;
     for (const s of stars) {
-      const sx = s.x + px * s.depth, sy = s.y + py * s.depth;
+      const sx = s.x, sy = s.y;
       const alpha = s.a * (0.8 + Math.sin(t * 1.3 + s.tw) * 0.2);
       if (warp > 0.02) {
         const len = warp * 0.55 * s.depth;
@@ -168,11 +164,10 @@
 
     // Constellations: lines trace in after the arrival, with a little more parallax
     ctx.font = "10.5px 'JetBrains Mono', monospace";
-    const cpx = -lookX * 30, cpy = -lookY * 20;
     placed.forEach((c, ci) => {
       const prog = clamp((introT - 0.45 - ci * 0.025) / 0.5, 0, 1);
       if (prog <= 0) return;
-      const P = c.pts.map(([x, y]) => [x + cpx, y + cpy]);
+      const P = c.pts;
       ctx.strokeStyle = `rgba(140,200,217,${0.35 * prog})`;
       ctx.lineWidth = 0.8;
       c.lines.forEach(([i, j], li) => {
@@ -333,10 +328,6 @@
     }
   });
   canvas.addEventListener("pointermove", (e) => {
-    if (e.pointerType === "mouse") {
-      lookX = (e.clientX / W) * 2 - 1;
-      lookY = (e.clientY / H) * 2 - 1;
-    }
     const pt = pointers.get(e.pointerId);
     if (pt) {
       const dx = e.clientX - pt.x, dy = e.clientY - pt.y;
@@ -377,7 +368,6 @@
       sky.hidden = false;
       resize();
       resetCamera(true);
-      lookX = lookY = 0;
       opened = performance.now();
       if (!t0) t0 = opened;
       last = 0;
