@@ -51,7 +51,29 @@
     { name: "Pegasus", w: 1, stars: [[.2, .2], [.75, .2], [.75, .75], [.2, .75], [0, .02], [1, .95]], lines: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [2, 5]] },
     { name: "Taurus", w: .9, stars: [[.5, .55], [.32, .42], [.12, .25], [.38, .6], [.16, .5], [0, .35], [.7, .65], [.95, .8]], lines: [[0, 1], [1, 2], [0, 3], [3, 4], [4, 5], [0, 6], [6, 7]] },
     { name: "Aquila", w: .8, stars: [[.5, .45], [.4, .38], [.6, .52], [.05, .2], [.95, .8], [.5, 1], [.45, 0]], lines: [[1, 0], [0, 2], [1, 3], [2, 4], [0, 5], [0, 6]] },
+    { name: "Draco", w: 1.2, stars: [[0, .9], [.15, .7], [.3, .75], [.45, .55], [.4, .3], [.55, .15], [.75, .2], [.9, .05], [1, .2], [.88, .3]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 6]] },
+    { name: "Boötes", w: .7, stars: [[.5, 1], [.3, .65], [.7, .6], [.25, .3], [.6, .25], [.45, 0]], lines: [[0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 5]] },
+    { name: "Hercules", w: .8, stars: [[.3, .35], [.7, .3], [.75, .65], [.35, .7], [0, .1], [.1, .95], [1, 0], [.95, 1]], lines: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [3, 5], [1, 6], [2, 7]] },
+    { name: "Corona Borealis", w: .5, stars: [[0, .3], [.2, .7], [.45, .9], [.7, .8], [.9, .5], [1, .2]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]] },
+    { name: "Sagittarius", w: .9, stars: [[.2, .4], [.45, .2], [.75, .3], [.8, .65], [.45, .7], [.15, .75], [.6, 0], [1, .5]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [1, 6], [2, 6], [2, 7], [3, 7], [4, 1]] },
+    { name: "Canis Major", w: .7, stars: [[.55, .1], [.3, .2], [.5, .45], [.3, .7], [.75, .75], [.1, 1], [.65, 1]], lines: [[0, 1], [0, 2], [2, 3], [2, 4], [3, 5], [4, 6]] },
+    { name: "Perseus", w: .8, stars: [[.4, 0], [.45, .25], [.5, .45], [.3, .6], [.15, .85], [.7, .6], [.85, .9]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [2, 5], [5, 6]] },
+    { name: "Andromeda", w: 1.1, stars: [[0, .2], [.35, .35], [.65, .5], [1, .7], [.4, .1], [.7, .25]], lines: [[0, 1], [1, 2], [2, 3], [1, 4], [2, 5]] },
+    { name: "Virgo", w: 1, stars: [[.1, .2], [.3, .35], [.5, .3], [.65, .5], [.85, .45], [.45, .65], [.3, .95], [.8, .9]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [2, 5], [5, 6], [3, 7]] },
+    { name: "Centaurus", w: 1, stars: [[.2, .1], [.4, .3], [.6, .25], [.5, .55], [.25, .7], [.8, .75], [.1, 1], [.95, 1]], lines: [[0, 1], [1, 2], [1, 3], [3, 4], [3, 5], [4, 6], [5, 7]] },
+    { name: "Hydra", w: 1.4, stars: [[0, .2], [.1, .05], [.2, .25], [.35, .4], [.5, .45], [.65, .6], [.8, .7], [1, .9]], lines: [[0, 1], [1, 2], [2, 0], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7]] },
+    { name: "Auriga", w: .7, stars: [[.5, 0], [.1, .3], [.2, .8], [.75, .95], [.95, .45]], lines: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0]] },
   ];
+  // Where each constellation sits on the celestial sphere: [longitude, latitude] in degrees,
+  // longitude 0 being straight ahead in the default view. Spread out so every direction has some.
+  const SKY_POS = {
+    "Ursa Major": [-38, 3], "Cassiopeia": [32, 6], "Cygnus": [0, 5], "Lyra": [15, -3], "Orion": [42, -46],
+    "Scorpius": [-42, -48], "Leo": [-16, -55], "Crux": [20, -58], "Gemini": [75, -12], "Taurus": [110, -22],
+    "Pegasus": [-80, -14], "Aquila": [-120, -6], "Ursa Minor": [-8, 38], "Draco": [35, 34], "Boötes": [150, 8],
+    "Hercules": [-62, 26], "Corona Borealis": [-96, 22], "Sagittarius": [-160, -30], "Canis Major": [162, -42],
+    "Perseus": [72, 20], "Andromeda": [-150, 30], "Virgo": [125, 30], "Centaurus": [92, -66], "Hydra": [-100, -62],
+    "Auriga": [180, 5],
+  };
 
   const INTRO_MS = 2200, CLOSE_MS = 380;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -82,27 +104,65 @@
     W = window.innerWidth; H = window.innerHeight;
     canvas.width = W * DPR; canvas.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    stars = Array.from({ length: Math.round((W * H) / 2400) }, () => ({
-      x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1 + 0.2,
-      a: Math.random() * 0.5 + 0.15, tw: Math.random() * 6, depth: Math.random() * 0.8 + 0.2,
-    }));
+    if (!stars.length) stars = makeSphereStars();
     belt = Array.from({ length: 360 }, () => ({ au: 2.2 + Math.random() * 1.1, a0: Math.random() * Math.PI * 2, s: Math.random() * 0.9 + 0.3 }));
     placeConstellations();
   }
 
-  // Spread constellations around the frame, leaving the centre to the Solar System
+  /* ───────── Celestial sphere ─────────
+     Stars and constellations are directions on a sphere at infinity: moving inside the
+     Solar System doesn't change them, but turning the camera turns the whole sky. */
+  const rad = (d) => (d * Math.PI) / 180;
+  const dirFrom = (lon, lat) => [Math.sin(lon) * Math.cos(lat), Math.sin(lat), -Math.cos(lon) * Math.cos(lat)];
+  const norm = (v) => { const l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; };
+
+  function makeSphereStars() {
+    const out = [];
+    const randDir = () => { const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2, s = Math.sqrt(1 - u * u); return [s * Math.cos(a), u, s * Math.sin(a)]; };
+    for (let i = 0; i < 1900; i++) out.push({ d: randDir(), r: Math.random() * 1 + 0.2, a: Math.random() * 0.5 + 0.15, tw: Math.random() * 6, depth: Math.random() * 0.8 + 0.2 });
+    // The Milky Way: a denser band along a great circle tilted ~60° to the planets' plane
+    const tiltMW = rad(60), nodeMW = rad(-30);
+    for (let i = 0; i < 1700; i++) {
+      const th = Math.random() * Math.PI * 2, off = ((Math.random() + Math.random() + Math.random() - 1.5) / 1.5) * rad(9);
+      let v = [Math.cos(th) * Math.cos(off), Math.sin(off), Math.sin(th) * Math.cos(off)];
+      v = [v[0], v[1] * Math.cos(tiltMW) - v[2] * Math.sin(tiltMW), v[1] * Math.sin(tiltMW) + v[2] * Math.cos(tiltMW)];
+      v = [v[0] * Math.cos(nodeMW) - v[2] * Math.sin(nodeMW), v[1], v[0] * Math.sin(nodeMW) + v[2] * Math.cos(nodeMW)];
+      out.push({ d: v, r: Math.random() * 0.7 + 0.15, a: Math.random() * 0.28 + 0.06, tw: Math.random() * 6, depth: Math.random() * 0.8 + 0.2 });
+    }
+    return out;
+  }
+
+  // Each constellation becomes a set of directions around its centre (about 14° across per unit width)
   function placeConstellations() {
-    const narrow = W < 700;
-    const spots = narrow
-      ? [[.62, .17], [.05, .25], [.7, .3], [.05, .72], [.68, .72], [.3, .84], [.08, .88], [.7, .88]]
-      : [[.03, .2], [.36, .06], [.6, .05], [.82, .1], [.02, .45], [.88, .4],
-         [.03, .74], [.2, .84], [.42, .88], [.62, .86], [.84, .72], [.13, .62], [.22, .2]];
-    const base = Math.min(W, H) * (narrow ? 0.16 : 0.11);
-    placed = CONSTELLATIONS.slice(0, spots.length).map((c, i) => {
-      const [fx, fy] = spots[i];
-      const bw = base * c.w, bh = base * 0.75;
-      return { ...c, pts: c.stars.map(([x, y]) => [fx * W + x * bw, fy * H + y * bh]) };
+    const SPAN = rad(14);
+    placed = CONSTELLATIONS.map((c) => {
+      const [lonD, latD] = SKY_POS[c.name];
+      const lon = rad(lonD), lat = rad(latD);
+      const C = dirFrom(lon, lat);
+      const east = [Math.cos(lon), 0, Math.sin(lon)];
+      const north = [-Math.sin(lon) * Math.sin(lat), Math.cos(lat), Math.cos(lon) * Math.sin(lat)];
+      const dirs = c.stars.map(([x, y]) => {
+        const dx = Math.tan((x - 0.5) * c.w * SPAN), dy = Math.tan((0.5 - y) * 0.75 * SPAN);
+        return norm([C[0] + east[0] * dx + north[0] * dy, C[1] + east[1] * dx + north[1] * dy, C[2] + east[2] * dx + north[2] * dy]);
+      });
+      return { ...c, dirs };
     });
+  }
+
+  // Camera for the sky: same yaw as the orbits, elevation from the orbit tilt (tilt = sin(elevation))
+  function skyCamera(yaw, tilt) {
+    const e = Math.asin(clamp(tilt, 0.05, 0.99));
+    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const F = Math.max(W, H) * 0.5;                  // ~90° field of view across the long side
+    const right = [1, 0, 0], up = [0, Math.cos(e), -Math.sin(e)], fwd = [0, -Math.sin(e), -Math.cos(e)];
+    return (d) => {
+      // rotate the sky with the scene (same rotation as the planets' yaw)
+      const x = d[0] * cy - d[2] * sy, y = d[1], z = d[0] * sy + d[2] * cy;
+      const depth = x * fwd[0] + y * fwd[1] + z * fwd[2];
+      if (depth < 0.08) return null;
+      return [W / 2 + (F * (x * right[0] + y * right[1] + z * right[2])) / depth,
+              H / 2 - (F * (x * up[0] + y * up[1] + z * up[2])) / depth];
+    };
   }
 
   /* World → screen. Orbits live in a plane; yaw spins it, tilt squashes it. */
@@ -392,8 +452,12 @@
     // Background stars: hyperspace streaks during the entrance, then parallax points
     const cx0 = W / 2, cy0 = H / 2;
     const warp = reduceMotion ? 0 : 1 - easeOut(introT * 1.6);
+    const toSky = skyCamera(cam.yaw, lerp(0.97, cam.tilt, intro));   // sweeps down with the opening tilt
     for (const s of stars) {
-      const sx = s.x, sy = s.y;
+      const q = toSky(s.d);
+      if (!q) continue;
+      const sx = q[0], sy = q[1];
+      if (sx < -4 || sx > W + 4 || sy < -4 || sy > H + 4) continue;
       const alpha = s.a * (0.8 + Math.sin(t * 1.3 + s.tw) * 0.2) * (1 - 0.85 * starFade);
       if (warp > 0.02) {
         const len = warp * 0.55 * s.depth;
@@ -415,10 +479,12 @@
     // Constellations: lines trace in after the arrival (only meaningful as seen from Earth)
     ctx.font = "10.5px 'JetBrains Mono', monospace";
     placed.forEach((c, ci) => {
-      const prog = clamp((introT - 0.45 - ci * 0.025) / 0.5, 0, 1) * constA;
+      const prog = clamp((introT - 0.45 - (ci % 13) * 0.025) / 0.5, 0, 1) * constA;
       if (prog <= 0) return;
-      const P = c.pts;
-      ctx.strokeStyle = `rgba(140,200,217,${0.35 * prog})`;
+      const P = c.dirs.map(toSky);
+      if (P.some((q) => !q)) return;                  // partly behind the camera
+      if (P.every(([x, y]) => x < -20 || x > W + 20 || y < -20 || y > H + 20)) return;
+      ctx.strokeStyle = `rgba(140,200,217,${0.3 * prog})`;
       ctx.lineWidth = 0.8;
       c.lines.forEach(([i, j], li) => {
         const lp = clamp(prog * c.lines.length - li, 0, 1);
