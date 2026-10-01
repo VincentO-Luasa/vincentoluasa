@@ -140,6 +140,7 @@
             </div>
             <ul class="mol__legend" aria-hidden="true">
               <li><i style="background:#3f7383"></i><i style="background:#76afc0"></i>T-cell receptor</li>
+              <li><i style="background:#f3a6c8"></i>CDR3α loop</li>
               <li><i style="background:#ffffff"></i>CDR3β loop</li>
               <li><i style="background:#e2c48f"></i>cancer peptide</li>
               <li><i style="background:#8f8bbd"></i>MHC holder</li>
@@ -181,9 +182,9 @@
             <text class="tcr-svg__cell" x="16" y="246">Cancer cell</text>
           </svg>
 
-          <p class="lab-panel__hint">Drag to rotate. The receptor’s CDR3β loop (white) grips the cancer peptide <code>SLLMWITQC</code> (NY-ESO-1). Click a residue below, or on the loop, to mutate it.</p>
+          <p class="lab-panel__hint">Drag to rotate. The receptor grips the cancer peptide <code>SLLMWITQC</code> (NY-ESO-1) with two loops, CDR3α (pink) and CDR3β (white). Click a residue below, or on a loop, to mutate it.</p>
 
-          <div class="seq" id="tcrSeq" role="group" aria-label="CDR3 beta sequence"></div>
+          <div class="loops" id="tcrSeq"></div>
           <div class="aa-picker" id="tcrPicker" hidden>
             <span class="aa-picker__label" id="tcrPickerLabel">Mutate to:</span>
             <div class="aa-picker__grid" id="tcrPickerGrid"></div>
