@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vincent O'Luasa — Research Engineer</title>
+  <meta name="description" content="Vincent O'Luasa — Research Engineer in BioAI at InstaDeep. Machine learning for proteins, computer vision, and a lifelong curiosity for space and the brain." />
+  <meta name="theme-color" content="#05060f" />
+  <meta property="og:title" content="Vincent O'Luasa — Research Engineer" />
+  <meta property="og:description" content="Machine learning for proteins, computer vision, and a lifelong curiosity for space and the brain." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='30' fill='%2305060f'/><circle cx='32' cy='32' r='7' fill='%237ef0ff'/><circle cx='14' cy='20' r='3' fill='%23b18cff'/><circle cx='50' cy='18' r='3' fill='%23b18cff'/><circle cx='46' cy='48' r='3' fill='%23ffc56e'/><path d='M14 20L32 32L50 18M32 32L46 48' stroke='%237ef0ff' stroke-width='1.5' opacity='.6'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <canvas id="cosmos" aria-hidden="true"></canvas>
+  <div class="nebula" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo" aria-label="Back to top">
+      <span class="nav__dot"></span>V<span class="accent">·</span>O
+    </a>
+    <nav>
+      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Trajectory</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact" class="nav__cta">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- ───────────── HERO ───────────── -->
+    <section class="hero">
+      <p class="eyebrow reveal"><span class="pulse-dot"></span>Research Engineer · BioAI @ InstaDeep</p>
+      <h1 class="hero__title reveal">
+        Vincent<br /><em>O’Luasa</em>
+      </h1>
+      <p class="hero__lede reveal">
+        I build machine-learning models that read the language of proteins —
+        and I spend my spare cycles wondering how brains think and how stars are born.
+      </p>
+      <div class="hero__actions reveal">
+        <a href="#work" class="btn btn--primary">Explore my work <span aria-hidden="true">→</span></a>
+        <a href="https://github.com/L1ttleFinger" class="btn btn--ghost" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <dl class="hero__meta reveal">
+        <div><dt>Based in</dt><dd>Paris, France</dd></div>
+        <div><dt>Coordinates</dt><dd>48.8566° N · 2.3522° E</dd></div>
+        <div><dt>Currently</dt><dd>Protein ML research</dd></div>
+      </dl>
+      <a href="#about" class="scroll-cue" aria-label="Scroll to about">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- ───────────── ABOUT ───────────── -->
+    <section class="section" id="about">
+      <div class="section__head reveal">
+        <span class="section__index">01</span>
+        <h2>About</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <div class="about">
+        <div class="about__text reveal">
+          <p class="about__big">
+            An engineer trained in <em>control systems and robotics</em>, now working where
+            <em>deep learning meets biology</em>.
+          </p>
+          <p>
+            At InstaDeep’s BioAI department I train inverse-folding models from scratch, fine-tune
+            protein-folding models to predict binding affinity, and dig into model latent spaces to
+            understand how a single point mutation can change everything.
+          </p>
+          <p>
+            Before that, I led an R&amp;D team building generative image models, action recognition in video
+            and object segmentation, and shipped data platforms for industry clients. My path runs
+            through Paris and Madrid, from classical mechanics to computer vision to proteins.
+          </p>
+          <p>
+            Outside of work, I’m drawn to the two great frontiers — the cosmos above us and the
+            hundred billion neurons inside us. I’ve studied neuroscience through HarvardX and am currently
+            exploring quantum physics.
+          </p>
+        </div>
+
+        <ul class="stats reveal">
+          <li><span class="stats__n" data-count="4" data-suffix="+">0</span><span class="stats__l">years shipping ML in industry &amp; research</span></li>
+          <li><span class="stats__n" data-count="2">0</span><span class="stats__l">engineering master’s degrees (Paris · Madrid)</span></li>
+          <li><span class="stats__n" data-count="4">0</span><span class="stats__l">languages — French, English, Spanish, a little Chinese</span></li>
+          <li><span class="stats__n" data-count="300" data-suffix="+">0</span><span class="stats__l">numerical simulations for watch-making R&amp;D</span></li>
+        </ul>
+      </div>
+
+      <div class="orbits">
+        <article class="orbit-card reveal">
+          <div class="orbit-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="4"/><circle cx="10" cy="12" r="3"/><circle cx="38" cy="12" r="3"/><circle cx="10" cy="36" r="3"/><circle cx="38" cy="36" r="3"/><path d="M13 13.5L21 22M35 13.5L27 22M13 34.5L21 26M35 34.5L27 26M10 15v18M38 15v18"/></svg>
+          </div>
+          <h3>Machine Learning</h3>
+          <p>Deep learning end-to-end in PyTorch: training from scratch, fine-tuning foundation models, and making them interpretable.</p>
+        </article>
+        <article class="orbit-card reveal">
+          <div class="orbit-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M16 4c0 10 16 10 16 20S16 34 16 44M32 4c0 10-16 10-16 20s16 10 16 20M18 10h12M17 17h14M17 31h14M18 38h12"/></svg>
+          </div>
+          <h3>Biology</h3>
+          <p>Protein folding, inverse folding, mutation effects and T-cell receptor binding — learning the grammar of life.</p>
+        </article>
+        <article class="orbit-card reveal">
+          <div class="orbit-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"/><ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(-25 24 24)"/><circle cx="41" cy="16" r="2"/></svg>
+          </div>
+          <h3>Space &amp; the Brain</h3>
+          <p>A lifelong fascination with the cosmos and with neuroscience — two systems of staggering, beautiful complexity.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────── EXPERIENCE ───────────── -->
+    <section class="section" id="experience">
+      <div class="section__head reveal">
+        <span class="section__index">02</span>
+        <h2>Trajectory</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <ol class="timeline">
+        <li class="timeline__item reveal">
+          <div class="timeline__node timeline__node--live"></div>
+          <div class="timeline__when">Apr 2024 — Present<span>Paris, France</span></div>
+          <div class="timeline__body">
+            <h3>Research Engineer <span class="at">@ InstaDeep</span></h3>
+            <p class="timeline__team">BioAI department</p>
+            <ul>
+              <li>Trained inverse-folding models from scratch to improve enhanced-mutant proposal.</li>
+              <li>Fine-tuned protein-folding models for binding-affinity prediction — architecture modifications and shifting confidence-score distributions toward enhanced mutants.</li>
+              <li>Analysed model latent spaces to understand how close mutations are represented, with the goal of finding enhanced point mutations.</li>
+              <li>State-of-the-art reviews across biology and ML: protein folding, biochemical changes upon mutation, drivers of T-cell receptor binding.</li>
+            </ul>
+            <div class="tags"><span>PyTorch</span><span>Protein folding</span><span>Inverse folding</span><span>Representation learning</span></div>
+          </div>
+        </li>
+
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <div class="timeline__when">Sep 2022 — Apr 2024<span>Paris, France</span></div>
+          <div class="timeline__body">
+            <h3>Data Scientist &amp; ML Engineer <span class="at">@ HeadMind Partners</span></h3>
+            <ul>
+              <li>Led the R&amp;D team on generative image AI, action recognition in videos, and object detection &amp; segmentation.</li>
+              <li>Deployed data analytics at scale for a media client: data-lake enrichment and KPI dashboards.</li>
+              <li>Built deep-learning models for medical and industrial image analysis.</li>
+              <li>Compared tabular vs. graph approaches for fraud detection in anti-money-laundering.</li>
+            </ul>
+            <div class="tags"><span>Generative AI</span><span>Computer vision</span><span>Graph ML</span><span>Team lead</span></div>
+          </div>
+        </li>
+
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <div class="timeline__when">Jan 2022 — Sep 2022<span>Madrid, Spain</span></div>
+          <div class="timeline__body">
+            <h3>Computer Vision Engineer <span class="at">@ ROADIS</span></h3>
+            <p class="timeline__team">Master’s thesis</p>
+            <ul>
+              <li>Led a study comparing AI and classical approaches for detecting hazardous situations on highways.</li>
+              <li>Designed algorithms that measure distances between cars in traffic video.</li>
+              <li>Proposed three commercial applications for the resulting system.</li>
+            </ul>
+            <div class="tags"><span>Computer vision</span><span>Video analytics</span><span>Road safety</span></div>
+          </div>
+        </li>
+
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <div class="timeline__when">Nov 2020 — Feb 2021<span>Paris, France</span></div>
+          <div class="timeline__body">
+            <h3>R&amp;D Analyst <span class="at">@ Global luxury watch manufacturer</span></h3>
+            <ul>
+              <li>Analysed a physical phenomenon with potential applications in watch-making.</li>
+              <li>Ran 300+ numerical simulations to evaluate its use, and turned findings into product-design proposals.</li>
+            </ul>
+            <div class="tags"><span>Simulation</span><span>Physics</span><span>R&amp;D</span></div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ───────────── WORK ───────────── -->
+    <section class="section" id="work">
+      <div class="section__head reveal">
+        <span class="section__index">03</span>
+        <h2>Selected work</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <p class="section__intro reveal">A mix of research themes from my day job and open-source side projects from my GitHub.</p>
+
+      <div class="work-grid">
+        <article class="card card--feature reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Research · InstaDeep</p>
+          <h3>Designing better proteins with inverse folding</h3>
+          <p>Training inverse-folding models from scratch — given a 3D structure, predict sequences that fold into it — to propose mutants with enhanced properties.</p>
+          <div class="tags"><span>Protein design</span><span>Deep learning</span></div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Research · InstaDeep</p>
+          <h3>Binding affinity from folding models</h3>
+          <p>Adapting protein-folding models to predict binding affinity, steering their confidence toward enhanced mutants.</p>
+          <div class="tags"><span>Fine-tuning</span><span>Binding</span></div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Research · InstaDeep</p>
+          <h3>Mapping latent spaces of mutations</h3>
+          <p>Probing how models represent near-identical sequences, to find the single point mutations that matter.</p>
+          <div class="tags"><span>Interpretability</span></div>
+        </article>
+
+        <a class="card card--link reveal" href="https://github.com/L1ttleFinger/graph_search_algorithms" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Python</p>
+          <h3>Graph search, visualised</h3>
+          <p>An interactive Streamlit app that animates classic graph search algorithms — BFS and DFS, with A* and Dijkstra on the way.</p>
+          <div class="tags"><span>Algorithms</span><span>Streamlit</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a class="card card--link reveal" href="https://github.com/L1ttleFinger/repartition_enm" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Python</p>
+          <h3>Fair assignment of trainee judges</h3>
+          <p>A web app that optimally assigns trainee magistrates to courts, balancing their ranked wishes against real-world constraints — with validation, analytics and visual results.</p>
+          <div class="tags"><span>Optimisation</span><span>Streamlit</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a class="card card--link reveal" href="https://github.com/L1ttleFinger/Apple_Scraping" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Jupyter</p>
+          <h3>App Store Connect analytics scraper</h3>
+          <p>Recovering the app analytics data Apple’s API doesn’t expose, by automating App Store Connect with Selenium.</p>
+          <div class="tags"><span>Automation</span><span>Selenium</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Computer vision · ROADIS</p>
+          <h3>Measuring safe distances on highways</h3>
+          <p>Algorithms that estimate inter-vehicle distances from traffic video to flag hazardous situations.</p>
+          <div class="tags"><span>Vision</span><span>Safety</span></div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Venture · 2025</p>
+          <h3>A voice companion for the elderly</h3>
+          <p>Co-founded an attempt at a conversational voice companion to keep older people connected and less alone.</p>
+          <div class="tags"><span>Entrepreneurship</span><span>Voice AI</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────── EDUCATION & SKILLS ───────────── -->
+    <section class="section" id="education">
+      <div class="section__head reveal">
+        <span class="section__index">04</span>
+        <h2>Education &amp; toolkit</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <div class="edu">
+        <div class="edu__list">
+          <article class="edu__item reveal">
+            <span class="edu__when">2021 — 2022</span>
+            <h3>Universidad Politécnica de Madrid</h3>
+            <p>Master in Robotics &amp; Automation — double degree with CentraleSupélec. AI, computer vision, non-linear problem solving, robot control.</p>
+          </article>
+          <article class="edu__item reveal">
+            <span class="edu__when">2019 — 2022</span>
+            <h3>CentraleSupélec</h3>
+            <p>General Engineering degree, specialisation in Control Engineering. Mathematics, algorithmics, statistics &amp; optimisation.</p>
+          </article>
+          <article class="edu__item reveal">
+            <span class="edu__when">2017 — 2019</span>
+            <h3>Collège Stanislas</h3>
+            <p>Classe préparatoire aux grandes écoles — fundamental mathematics, physics and algorithms.</p>
+          </article>
+          <article class="edu__item reveal">
+            <span class="edu__when">2019 — ∞</span>
+            <h3>Lifelong learning</h3>
+            <p>Google Cloud Professional ML Engineer · Deep Learning Specialization (DeepLearning.AI) · Neuroscience (HarvardX) · Computer Science (HarvardX) · Exploring Quantum Physics <em>(in progress)</em>.</p>
+          </article>
+        </div>
+
+        <aside class="toolkit reveal">
+          <h3>Toolkit</h3>
+          <div class="chips">
+            <span>Python</span><span>PyTorch</span><span>SQL</span><span>Git</span><span>Google Cloud</span><span>MATLAB</span><span>OCaml</span><span>Streamlit</span><span>Claude Code</span>
+          </div>
+          <h3>Certified</h3>
+          <p class="cert"><span class="cert__badge">GCP</span> Professional Machine Learning Engineer</p>
+          <h3>Off the clock</h3>
+          <ul class="offclock">
+            <li><span>🏋️</span> Calisthenics, running &amp; swimming</li>
+            <li><span>🍳</span> Cooking — CAP cuisine certified</li>
+            <li><span>🎹</span> Piano</li>
+            <li><span>🧠</span> Neuroscience</li>
+            <li><span>🔭</span> Space &amp; astrophysics</li>
+            <li><span>➗</span> Volunteer mathematics teacher</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ───────────── CONTACT ───────────── -->
+    <section class="section contact" id="contact">
+      <div class="contact__inner reveal">
+        <p class="eyebrow"><span class="pulse-dot"></span>Open channel</p>
+        <h2 class="contact__title">Let’s make <em>contact</em>.</h2>
+        <p class="contact__lede">Whether it’s protein ML, a side project, or a conversation about black holes and neurons — my inbox is open.</p>
+        <div class="contact__actions">
+          <a class="btn btn--primary btn--lg" href="mailto:vincent.oluasa@gmail.com">vincent.oluasa@gmail.com</a>
+          <a class="btn btn--ghost btn--lg" href="https://github.com/L1ttleFinger" target="_blank" rel="noopener">github.com/L1ttleFinger</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Vincent O’Luasa</p>
+    <p class="footer__hint">Move your cursor across the sky — the stars are neurons, and they fire.</p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
