@@ -353,7 +353,7 @@ main, .footer, .nav { position: relative; z-index: 1; }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   margin-top: 80px;
   gap: 1px;
   background: var(--border);
@@ -491,11 +491,13 @@ main, .footer, .nav { position: relative; z-index: 1; }
   font-size: 16px;
 }
 .timeline__body li + li { margin-top: 8px; }
-.timeline__body li::before {
+.timeline__body li::before,
+.bullets li::before {
   content: "";
   position: absolute;
-  left: 2px; top: 0.72em;
-  width: 8px; height: 1px;
+  left: 4px; top: 0.68em;
+  width: 5px; height: 5px;
+  border-radius: 50%;
   background: var(--synapse);
 }
 
@@ -599,6 +601,14 @@ main, .footer, .nav { position: relative; z-index: 1; }
   margin: 8px 0 8px;
 }
 .edu__item p { color: var(--muted); font-size: 15px; }
+.bullets { margin-top: 4px; }
+.bullets li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.bullets li + li { margin-top: 4px; }
 
 .toolkit {
   position: sticky;
@@ -719,7 +729,7 @@ main, .footer, .nav { position: relative; z-index: 1; }
   .edu { grid-template-columns: 1fr; gap: 44px; }
   .intro__grid { grid-template-columns: 1fr; gap: 48px; }
   .portrait { max-width: 420px; }
-  .stats { grid-template-columns: 1fr 1fr; }
+
   .work-grid { grid-template-columns: 1fr 1fr; }
   .orbits { grid-template-columns: 1fr; }
   .toolkit { position: static; }
@@ -764,7 +774,7 @@ main, .footer, .nav { position: relative; z-index: 1; }
   .contact__actions .btn { white-space: normal; word-break: break-all; justify-content: center; }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 600px) {
   .stats { grid-template-columns: 1fr; }
 }
 
