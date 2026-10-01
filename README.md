@@ -18,8 +18,13 @@ python3 -m http.server 8000
 ```
 index.html            content (all sections)
 assets/css/style.css  theme & layout
-assets/js/main.js     neural-cosmos canvas, nav, scroll reveals
+assets/js/main.js       background neural sky, nav, scroll reveals, easter eggs
+assets/js/explainer.js  "My job in 30 seconds" TCR–pMHC mutation explorer (toy scores)
+assets/js/playground.js graph-search playground (BFS, DFS, Dijkstra, A*)
 ```
+
+Placeholders awaiting real content are marked with `class="ph"` in `index.html`
+(Now panel, lab notebook entries, hobby photos): `grep -n 'class="ph"' index.html`.
 
 ## Deploy
 

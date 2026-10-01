@@ -29,9 +29,10 @@
       </button>
       <ul class="nav__links" id="navLinks">
         <li><a href="#about">About</a></li>
-        <li><a href="#experience">Trajectory</a></li>
         <li><a href="#work">Work</a></li>
-        <li><a href="#education">Education</a></li>
+        <li><a href="#lab">Lab</a></li>
+        <li><a href="#playground">Playground</a></li>
+        <li><a href="#experience">Trajectory</a></li>
         <li><a href="#contact" class="nav__cta">Contact</a></li>
       </ul>
     </nav>
@@ -45,34 +46,27 @@
           <p class="eyebrow reveal"><span class="status-dot"></span>Research Engineer · BioAI · InstaDeep</p>
           <h1 class="intro__name reveal">Vincent O’Luasa</h1>
           <p class="intro__lead reveal">
-            Hi! I’m a robotics and control engineer by training, and today I work where
-            <em>deep learning meets biology</em>.
+            Hi, I’m Vincent. Currently trying to <em>cure cancer</em> at InstaDeep.
           </p>
-          <div class="intro__bio reveal">
-            <p>
-              At InstaDeep’s BioAI team, I spend most of my time on protein binding: I fine-tune
-              protein-folding models to predict binding affinity, then dig into what they’ve learned to
-              understand how a single mutation can change a protein. On the side, I’m running an
-              experiment I’m really excited about: handing Claude an inverse-folding project to run
-              entirely on its own, to find out how close an AI agent can get to being a full-time
-              research colleague.
-            </p>
-            <p>
-              Before InstaDeep, I led an R&amp;D team at HeadMind Partners working on generative image
-              models, action recognition and object segmentation, and built data platforms for industry
-              clients. My path has taken me from Paris to Madrid and back, and from classical mechanics
-              to computer vision to proteins. I love diving into a new field and learning it from the
-              ground up.
-            </p>
-            <p>
-              When I’m away from my desk, I’m probably doing calisthenics, climbing, hiking (that’s me
-              in the Vercors), or cooking for friends. I studied neuroscience at CentraleSupélec and
-              online, and space has fascinated me for as long as I can remember. I’m always happy to
-              chat about either.
-            </p>
+          <p class="intro__bio reveal">
+            I build deep-learning models that predict how T-cell receptors bind to cancer targets,
+            and I’m testing whether Claude can run a research project entirely on its own.
+            Robotics engineer by training; climber, cook and space enthusiast the rest of the time.
+          </p>
+
+          <div class="now reveal" aria-label="What I'm doing now">
+            <div class="now__head"><span class="now__title">Now</span><span class="now__date">October 2026</span></div>
+            <dl>
+              <div><dt>Working on</dt><dd>Binding-affinity models for TCR–pMHC</dd></div>
+              <div><dt>Experimenting</dt><dd>Claude as a full-time research colleague</dd></div>
+              <div><dt>Training for</dt><dd><span class="ph" title="Placeholder: replace with your own content">your current calisthenics goal</span></dd></div>
+              <div><dt>Next summit</dt><dd><span class="ph" title="Placeholder: replace with your own content">your next climb or hike</span></dd></div>
+              <div><dt>Last dish</dt><dd><span class="ph" title="Placeholder: replace with your own content">something you cooked recently</span></dd></div>
+            </dl>
           </div>
+
           <div class="intro__actions reveal">
-            <a href="#work" class="btn btn--primary">View my work</a>
+            <a href="#explainer" class="btn btn--primary">What I do, in 30 seconds</a>
             <a href="https://github.com/VincentO-Luasa" class="btn btn--ghost" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
               GitHub
@@ -101,36 +95,283 @@
         <li><span class="stats__n" data-count="2">0</span><span class="stats__l">engineering master’s degrees (Paris · Madrid)</span></li>
         <li><span class="stats__n" data-count="3">0</span><span class="stats__l">languages: French, English, Spanish</span></li>
       </ul>
+    </section>
 
-      <div class="orbits">
-        <article class="orbit-card reveal">
-          <div class="orbit-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="4"/><circle cx="10" cy="12" r="3"/><circle cx="38" cy="12" r="3"/><circle cx="10" cy="36" r="3"/><circle cx="38" cy="36" r="3"/><path d="M13 13.5L21 22M35 13.5L27 22M13 34.5L21 26M35 34.5L27 26M10 15v18M38 15v18"/></svg>
+    <!-- ───────────── EXPLAINER ───────────── -->
+    <section class="section" id="explainer">
+      <div class="section__head reveal">
+        <span class="section__index">01</span>
+        <h2>My job in 30 seconds</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <div class="explainer">
+        <ol class="explainer__steps reveal">
+          <li>
+            <h3>T cells patrol your body</h3>
+            <p>Each T cell carries a receptor (the <strong>TCR</strong>) that inspects small protein fragments, <strong>peptides</strong>, displayed by <strong>MHC</strong> molecules on the surface of every cell.</p>
+          </li>
+          <li>
+            <h3>Cancer cells show abnormal peptides</h3>
+            <p>But natural TCRs often bind them too weakly to trigger an attack, so the tumour slips through.</p>
+          </li>
+          <li>
+            <h3>One mutation can change everything</h3>
+            <p>Changing a single amino acid in the TCR’s binding loops can make it grip much harder, or let go. With 20 amino acids per position, the space of possible variants explodes.</p>
+          </li>
+          <li>
+            <h3>My models predict which ones work</h3>
+            <p>I train deep-learning models to predict how each mutation changes <strong>TCR–pMHC</strong> binding, so the lab tests the most promising candidates first. Try it yourself →</p>
+          </li>
+        </ol>
+
+        <div class="lab-panel reveal" id="tcrDemo">
+          <div class="lab-panel__top">
+            <span class="lab-panel__label">Interactive · TCR–pMHC</span>
+            <button class="chip-btn" id="tcrReset" type="button">Reset</button>
           </div>
-          <h3>Machine Learning</h3>
-          <p>Deep learning end-to-end in PyTorch: training from scratch, fine-tuning foundation models, and making them interpretable.</p>
-        </article>
-        <article class="orbit-card reveal">
-          <div class="orbit-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 48 48"><path d="M16 4c0 10 16 10 16 20S16 34 16 44M32 4c0 10-16 10-16 20s16 10 16 20M18 10h12M17 17h14M17 31h14M18 38h12"/></svg>
+
+          <svg class="tcr-svg" viewBox="0 0 400 250" role="img" aria-labelledby="tcrSvgTitle">
+            <title id="tcrSvgTitle">Schematic of a T-cell receptor approaching a peptide presented by an MHC molecule on a cancer cell</title>
+            <defs>
+              <linearGradient id="bondGlow" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="var(--synapse)" stop-opacity="0" />
+                <stop offset=".5" stop-color="var(--synapse)" stop-opacity=".9" />
+                <stop offset="1" stop-color="var(--synapse)" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <!-- T cell -->
+            <path class="tcr-svg__membrane" d="M0 34 Q200 6 400 34" />
+            <text class="tcr-svg__cell" x="16" y="22">T cell</text>
+            <g class="tcr-svg__tcr" id="tcrGroup">
+              <rect x="164" y="26" width="30" height="78" rx="13" class="tcr-svg__chain" />
+              <rect x="206" y="26" width="30" height="78" rx="13" class="tcr-svg__chain tcr-svg__chain--b" />
+              <path d="M170 104 q9 12 18 0" class="tcr-svg__loop" />
+              <path d="M212 104 q9 14 18 0" class="tcr-svg__loop tcr-svg__loop--active" />
+              <text x="252" y="70" class="tcr-svg__tag">TCR</text>
+              <text x="252" y="108" class="tcr-svg__tag tcr-svg__tag--accent">CDR3β loop</text>
+            </g>
+            <rect id="tcrBond" x="186" y="118" width="28" height="30" fill="url(#bondGlow)" opacity=".4" />
+            <!-- Cancer cell -->
+            <g class="tcr-svg__mhc">
+              <path d="M150 232 V178 q0-16 16-16 h68 q16 0 16 16 V232" class="tcr-svg__chain tcr-svg__chain--mhc" />
+              <g class="tcr-svg__peptide">
+                <circle cx="168" cy="160" r="6" /><circle cx="182" cy="157" r="6" /><circle cx="196" cy="156" r="6" />
+                <circle cx="210" cy="156" r="6" /><circle cx="224" cy="157" r="6" /><circle cx="238" cy="160" r="6" />
+              </g>
+              <text x="262" y="160" class="tcr-svg__tag tcr-svg__tag--ember">peptide</text>
+              <text x="262" y="200" class="tcr-svg__tag">MHC</text>
+            </g>
+            <path class="tcr-svg__membrane" d="M0 232 Q200 252 400 232" />
+            <text class="tcr-svg__cell" x="16" y="246">Cancer cell</text>
+          </svg>
+
+          <p class="lab-panel__hint">Peptide <code>SLLMWITQC</code> (NY-ESO-1, a cancer antigen) on HLA-A*02:01. Click a residue of the TCR’s CDR3β loop to mutate it.</p>
+
+          <div class="seq" id="tcrSeq" role="group" aria-label="CDR3 beta sequence"></div>
+          <div class="aa-picker" id="tcrPicker" hidden>
+            <span class="aa-picker__label" id="tcrPickerLabel">Mutate to:</span>
+            <div class="aa-picker__grid" id="tcrPickerGrid"></div>
           </div>
-          <h3>Biology</h3>
-          <p>Binding-affinity prediction, protein folding, mutation effects and T-cell receptor binding.</p>
-        </article>
-        <article class="orbit-card reveal">
-          <div class="orbit-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"/><ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(-25 24 24)"/><circle cx="41" cy="16" r="2"/></svg>
+
+          <div class="meter">
+            <div class="meter__row">
+              <span class="meter__title">Predicted binding</span>
+              <span class="meter__verdict" id="tcrVerdict">Wild type</span>
+            </div>
+            <div class="meter__track"><span class="meter__wt" title="Wild type"></span><span class="meter__fill" id="tcrFill"></span></div>
+            <div class="meter__scale"><span>weaker</span><span>stronger</span></div>
           </div>
-          <h3>Space &amp; Neuroscience</h3>
-          <p>I studied neuroscience at CentraleSupélec and online, and keep a long-standing interest in astrophysics and how the brain computes.</p>
+
+          <div class="lab-panel__foot">
+            <span id="tcrMut" class="mono">No mutations</span>
+            <button class="chip-btn chip-btn--accent" id="tcrBest" type="button">Ask the model for the best single mutation</button>
+          </div>
+          <p class="lab-panel__note" id="tcrSpace">This loop has <strong>11</strong> mutable positions: 209 possible single mutants, ~21,000 doubles, ~1.3 million triples. Too many to test in a lab, which is why we predict.</p>
+          <p class="lab-panel__disclaimer">Illustration with toy scores, not real model predictions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── WORK ───────────── -->
+    <section class="section" id="work">
+      <div class="section__head reveal">
+        <span class="section__index">02</span>
+        <h2>Selected work</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <p class="section__intro reveal">Research themes from my current role, alongside open-source projects from my GitHub.</p>
+
+      <div class="work-grid">
+        <article class="card card--feature reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Main research · InstaDeep</p>
+          <h3>Predicting binding affinity with protein-folding models</h3>
+          <p>Fine-tuning protein-folding models to predict binding affinity: modifying their architecture and shifting their confidence-score distributions toward enhanced mutants.</p>
+          <div class="tags"><span>Binding affinity</span><span>Fine-tuning</span><span>PyTorch</span></div>
         </article>
+
+        <a class="card card--link reveal" href="#lab">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Side project · InstaDeep</p>
+          <h3>Claude as an autonomous researcher</h3>
+          <p>Pushing Claude to run an inverse-folding project on its own, from training models from scratch to proposing mutants, to see if an AI agent can work like a full-time employee.</p>
+          <div class="tags"><span>AI agents</span><span>Inverse folding</span></div>
+          <span class="card__arrow" aria-hidden="true">↓</span>
+        </a>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Research · InstaDeep</p>
+          <h3>Mapping latent spaces of mutations</h3>
+          <p>Probing how models represent near-identical sequences, to find the single point mutations that matter.</p>
+          <div class="tags"><span>Interpretability</span></div>
+        </article>
+
+        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Python</p>
+          <h3>Graph search, visualised</h3>
+          <p>An interactive Streamlit app that animates classic graph search algorithms — BFS and DFS, with A* and Dijkstra on the way.</p>
+          <div class="tags"><span>Algorithms</span><span>Streamlit</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/repartition_enm" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Python</p>
+          <h3>Fair assignment of trainee judges</h3>
+          <p>A web app that optimally assigns trainee magistrates to courts, balancing their ranked wishes against real-world constraints — with validation, analytics and visual results.</p>
+          <div class="tags"><span>Optimisation</span><span>Streamlit</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/Apple_Scraping" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Jupyter</p>
+          <h3>App Store Connect analytics scraper</h3>
+          <p>Recovering the app analytics data Apple’s API doesn’t expose, by automating App Store Connect with Selenium.</p>
+          <div class="tags"><span>Automation</span><span>Selenium</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Computer vision · ROADIS</p>
+          <h3>Measuring safe distances on highways</h3>
+          <p>Algorithms that estimate inter-vehicle distances from traffic video to flag hazardous situations.</p>
+          <div class="tags"><span>Vision</span><span>Safety</span></div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Venture · 2025</p>
+          <h3>A voice companion for the elderly</h3>
+          <p>Co-founded an attempt at a conversational voice companion to keep senior citizens connected and less alone.</p>
+          <div class="tags"><span>Entrepreneurship</span><span>Voice AI</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────── LAB NOTEBOOK ───────────── -->
+    <section class="section" id="lab">
+      <div class="section__head reveal">
+        <span class="section__index">03</span>
+        <h2>Lab notebook</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <div class="notebook">
+        <div class="notebook__intro reveal">
+          <p class="notebook__kicker">Side project · InstaDeep · ongoing</p>
+          <h3 class="notebook__question">Can an AI agent do research like a full-time employee?</h3>
+          <p>
+            I handed Claude an inverse-folding project (training models from scratch to propose enhanced
+            mutants) and pushed it to work completely autonomously: running the research loop itself, with as
+            little hand-holding from me as possible. These are notes from along the way.
+          </p>
+          <dl class="notebook__facts">
+            <div><dt>Researcher</dt><dd>Claude</dd></div>
+            <div><dt>Supervisor</dt><dd>me</dd></div>
+            <div><dt>Task</dt><dd>Inverse folding for enhanced-mutant proposal</dd></div>
+            <div><dt>Status</dt><dd><span class="status-dot status-dot--amber"></span>In progress</dd></div>
+          </dl>
+        </div>
+
+        <ol class="notebook__log">
+          <li class="entry reveal">
+            <span class="entry__tag">Entry 01</span>
+            <h4><span class="ph" title="Placeholder: replace with your own content">Title: e.g. the setup and first instructions</span></h4>
+            <p><span class="ph" title="Placeholder: replace with your own content">What you gave Claude at the start, and what it did first.</span></p>
+          </li>
+          <li class="entry reveal">
+            <span class="entry__tag">Entry 02</span>
+            <h4><span class="ph" title="Placeholder: replace with your own content">Title: a moment that surprised you</span></h4>
+            <p><span class="ph" title="Placeholder: replace with your own content">Something Claude did that you didn’t expect, good or bad.</span></p>
+          </li>
+          <li class="entry reveal">
+            <span class="entry__tag">Entry 03</span>
+            <h4><span class="ph" title="Placeholder: replace with your own content">Title: where it got stuck</span></h4>
+            <p><span class="ph" title="Placeholder: replace with your own content">A failure mode, and how (or whether) it recovered.</span></p>
+          </li>
+          <li class="entry entry--next reveal">
+            <span class="entry__tag">Next</span>
+            <h4><span class="ph" title="Placeholder: replace with your own content">What you’re trying next</span></h4>
+            <p><span class="ph" title="Placeholder: replace with your own content">Your current verdict: is it a colleague yet?</span></p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ───────────── PLAYGROUND ───────────── -->
+    <section class="section" id="playground">
+      <div class="section__head reveal">
+        <span class="section__index">04</span>
+        <h2>Playground</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <p class="section__intro reveal">
+        A browser version of my <a class="link" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">graph search project</a>,
+        running on a network of neurons. Click a neuron to set the start, another for the goal, then
+        pick an algorithm and watch the signal find its way.
+      </p>
+
+      <div class="pg reveal">
+        <div class="pg__bar">
+          <div class="seg" role="radiogroup" aria-label="Algorithm" id="pgAlgos">
+            <button type="button" role="radio" aria-checked="true" data-algo="bfs">BFS</button>
+            <button type="button" role="radio" aria-checked="false" data-algo="dfs">DFS</button>
+            <button type="button" role="radio" aria-checked="false" data-algo="dijkstra">Dijkstra</button>
+            <button type="button" role="radio" aria-checked="false" data-algo="astar">A*</button>
+          </div>
+          <div class="pg__actions">
+            <button type="button" class="chip-btn chip-btn--accent" id="pgRun">Run ▸</button>
+            <button type="button" class="chip-btn" id="pgRace">Race all four</button>
+            <button type="button" class="chip-btn" id="pgNew">New network</button>
+          </div>
+        </div>
+        <div class="pg__stage">
+          <canvas id="pgCanvas" aria-label="Interactive graph of neurons for path-finding algorithms"></canvas>
+          <div class="pg__legend" aria-hidden="true">
+            <span><i class="lg lg--start"></i>start</span>
+            <span><i class="lg lg--goal"></i>goal</span>
+            <span><i class="lg lg--seen"></i>explored</span>
+            <span><i class="lg lg--path"></i>path</span>
+          </div>
+        </div>
+        <div class="pg__info">
+          <p id="pgDesc"></p>
+          <div class="pg__stats" id="pgStats" aria-live="polite"></div>
+        </div>
       </div>
     </section>
 
     <!-- ───────────── EXPERIENCE ───────────── -->
     <section class="section" id="experience">
       <div class="section__head reveal">
-        <span class="section__index">01</span>
+        <span class="section__index">05</span>
         <h2>Trajectory</h2>
         <span class="section__rule"></span>
       </div>
@@ -197,90 +438,10 @@
       </ol>
     </section>
 
-    <!-- ───────────── WORK ───────────── -->
-    <section class="section" id="work">
-      <div class="section__head reveal">
-        <span class="section__index">02</span>
-        <h2>Selected work</h2>
-        <span class="section__rule"></span>
-      </div>
-
-      <p class="section__intro reveal">Research themes from my current role, alongside open-source projects from my GitHub.</p>
-
-      <div class="work-grid">
-        <article class="card card--feature reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Main research · InstaDeep</p>
-          <h3>Predicting binding affinity with protein-folding models</h3>
-          <p>Fine-tuning protein-folding models to predict binding affinity: modifying their architecture and shifting their confidence-score distributions toward enhanced mutants.</p>
-          <div class="tags"><span>Binding affinity</span><span>Fine-tuning</span><span>PyTorch</span></div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Side project · InstaDeep</p>
-          <h3>Claude as an autonomous researcher</h3>
-          <p>Pushing Claude to run an inverse-folding project on its own, from training models from scratch to proposing mutants, to see if an AI agent can work like a full-time employee.</p>
-          <div class="tags"><span>AI agents</span><span>Inverse folding</span></div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Research · InstaDeep</p>
-          <h3>Mapping latent spaces of mutations</h3>
-          <p>Probing how models represent near-identical sequences, to find the single point mutations that matter.</p>
-          <div class="tags"><span>Interpretability</span></div>
-        </article>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Python</p>
-          <h3>Graph search, visualised</h3>
-          <p>An interactive Streamlit app that animates classic graph search algorithms — BFS and DFS, with A* and Dijkstra on the way.</p>
-          <div class="tags"><span>Algorithms</span><span>Streamlit</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/repartition_enm" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Python</p>
-          <h3>Fair assignment of trainee judges</h3>
-          <p>A web app that optimally assigns trainee magistrates to courts, balancing their ranked wishes against real-world constraints — with validation, analytics and visual results.</p>
-          <div class="tags"><span>Optimisation</span><span>Streamlit</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/Apple_Scraping" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Jupyter</p>
-          <h3>App Store Connect analytics scraper</h3>
-          <p>Recovering the app analytics data Apple’s API doesn’t expose, by automating App Store Connect with Selenium.</p>
-          <div class="tags"><span>Automation</span><span>Selenium</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Computer vision · ROADIS</p>
-          <h3>Measuring safe distances on highways</h3>
-          <p>Algorithms that estimate inter-vehicle distances from traffic video to flag hazardous situations.</p>
-          <div class="tags"><span>Vision</span><span>Safety</span></div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Venture · 2025</p>
-          <h3>A voice companion for the elderly</h3>
-          <p>Co-founded an attempt at a conversational voice companion to keep senior citizens connected and less alone.</p>
-          <div class="tags"><span>Entrepreneurship</span><span>Voice AI</span></div>
-        </article>
-      </div>
-    </section>
-
     <!-- ───────────── EDUCATION & SKILLS ───────────── -->
     <section class="section" id="education">
       <div class="section__head reveal">
-        <span class="section__index">03</span>
+        <span class="section__index">06</span>
         <h2>Education &amp; toolkit</h2>
         <span class="section__rule"></span>
       </div>
@@ -322,17 +483,44 @@
           </div>
           <h3>Certified</h3>
           <p class="cert"><span class="cert__badge">GCP</span> Professional Machine Learning Engineer</p>
-          <h3>Off the clock</h3>
-          <ul class="offclock">
-            <li>Calisthenics, running &amp; swimming</li>
-            <li>Climbing &amp; hiking</li>
-            <li>Cooking (CAP cuisine certified)</li>
-            <li>Piano</li>
-            <li>Neuroscience &amp; space</li>
-            <li>Volunteer mathematics teacher</li>
-          </ul>
         </aside>
       </div>
+    </section>
+
+    <!-- ───────────── OFF THE CLOCK ───────────── -->
+    <section class="section" id="life">
+      <div class="section__head reveal">
+        <span class="section__index">07</span>
+        <h2>Off the clock</h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <p class="section__intro reveal">The things that keep me curious, and keep me sane, away from the GPU queue.</p>
+      <div class="life-grid">
+        <figure class="life-tile reveal">
+          <img src="assets/img/vincent-mont-aiguille.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Vincent hiking on a rocky ridge in the Vercors, Mont Aiguille behind him." />
+          <figcaption><strong>Hiking</strong> The Vercors, on the way to Mont Aiguille.</figcaption>
+        </figure>
+        <figure class="life-tile life-tile--empty reveal">
+          <div class="life-tile__ph" aria-hidden="true">⛰</div>
+          <figcaption><strong>Climbing</strong> <span class="ph" title="Placeholder: replace with your own content">add a climbing photo + one-line caption</span></figcaption>
+        </figure>
+        <figure class="life-tile life-tile--empty reveal">
+          <div class="life-tile__ph" aria-hidden="true">🍳</div>
+          <figcaption><strong>Cooking</strong> CAP cuisine certified. <span class="ph" title="Placeholder: replace with your own content">add a photo of a dish you’re proud of</span></figcaption>
+        </figure>
+        <figure class="life-tile life-tile--empty reveal">
+          <div class="life-tile__ph" aria-hidden="true">💪</div>
+          <figcaption><strong>Calisthenics</strong> <span class="ph" title="Placeholder: replace with your own content">add a photo of a favourite hold or skill</span></figcaption>
+        </figure>
+      </div>
+      <ul class="interests reveal">
+        <li><strong>Neuroscience</strong>studied at CentraleSupélec and online</li>
+        <li><strong>Space</strong>a lifelong fascination (try pressing <kbd>S</kbd>)</li>
+        <li><strong>Piano</strong>for the evenings</li>
+        <li><strong>Running &amp; swimming</strong>for the mornings</li>
+        <li><strong>Teaching</strong>volunteer mathematics teacher</li>
+      </ul>
     </section>
 
     <!-- ───────────── CONTACT ───────────── -->
@@ -352,9 +540,11 @@
 
   <footer class="footer">
     <p>© <span id="year"></span> Vincent O’Luasa</p>
-    <p class="footer__hint">Paris, France</p>
+    <p class="footer__hint">Paris, France · psst, press <kbd>S</kbd></p>
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/explainer.js"></script>
+  <script src="assets/js/playground.js"></script>
 </body>
 </html>
