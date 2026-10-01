@@ -405,6 +405,71 @@ main, .footer, .nav { position: relative; z-index: 1; }
 }
 .about__big em { color: var(--synapse); }
 
+.about__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.portrait { margin: 0; }
+.portrait__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 30px 80px -30px rgba(177, 140, 255, 0.35),
+    0 0 0 6px rgba(255, 255, 255, 0.02);
+}
+.portrait__frame::after {
+  /* blend the daylight photo into the night sky */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 6, 15, 0) 55%, rgba(5, 6, 15, 0.55) 100%);
+  pointer-events: none;
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  transition: transform 1.2s var(--ease);
+}
+.portrait:hover img { transform: scale(1.04); }
+
+.portrait__tag {
+  position: absolute;
+  z-index: 1;
+  top: 16%;
+  right: 6%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--bg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.portrait figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.portrait__coords {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -777,6 +842,7 @@ main, .footer, .nav { position: relative; z-index: 1; }
 /* ───────── Responsive ───────── */
 @media (max-width: 960px) {
   .about, .edu { grid-template-columns: 1fr; gap: 44px; }
+  .about__side { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
   .work-grid { grid-template-columns: 1fr 1fr; }
   .orbits { grid-template-columns: 1fr; }
   .toolkit { position: static; }
@@ -785,6 +851,7 @@ main, .footer, .nav { position: relative; z-index: 1; }
 @media (max-width: 760px) {
   body { font-size: 16px; }
   .eyebrow { font-size: 11.5px; letter-spacing: 0; }
+  .about__side { grid-template-columns: 1fr; }
 
   .nav__toggle { display: block; z-index: 2; }
   .nav__links {
