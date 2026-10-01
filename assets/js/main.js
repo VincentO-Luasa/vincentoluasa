@@ -1,8 +1,9 @@
 /* ──────────────────────────────────────────────
-   Neural cosmos — a starfield whose brightest stars
-   are wired together like neurons. Signals (action
-   potentials) travel along the connections and can
-   cascade; the cursor excites nearby neurons.
+   Quiet neural sky — a faint starfield with a sparse
+   network of "neurons". Nothing fires on its own: the
+   network wakes up around the cursor (neurons light up
+   and link to it, and fire when you pass close by),
+   and clicking the sky sends a signal cascade.
    ────────────────────────────────────────────── */
 (() => {
   document.documentElement.classList.remove("no-js");
@@ -12,18 +13,19 @@
   /* ───────── Canvas ───────── */
   const canvas = document.getElementById("cosmos");
   const ctx = canvas.getContext("2d");
-  const COLORS = {
-    synapse: [126, 240, 255],
-    nebula: [177, 140, 255],
-    ember: [255, 197, 110],
-  };
+  const ACCENT = [140, 200, 217];
+  const SIGNAL = [217, 189, 140];
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
+  const HOVER_R = 170;   // radius in which neurons sense the cursor
+  const FIRE_R = 55;     // passing this close fires a neuron
+
   let W = 0, H = 0, DPR = 1;
-  let stars = [], neurons = [], signals = [], meteors = [];
+  let stars = [], neurons = [], signals = [];
   let linkDist = 150;
-  const mouse = { x: -9999, y: -9999, active: false };
+  const mouse = { x: -9999, y: -9999, active: false, lastMove: 0 };
   let scrollY = window.scrollY;
+  let running = false;
 
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -32,260 +34,189 @@
     canvas.width = W * DPR;
     canvas.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    linkDist = Math.max(110, Math.min(170, Math.sqrt(W * H) / 7));
+    linkDist = Math.max(120, Math.min(180, Math.sqrt(W * H) / 6.5));
     build();
   }
 
   function build() {
     const area = W * H;
-
-    stars = Array.from({ length: Math.round(area / 2600) }, () => ({
+    stars = Array.from({ length: Math.round(area / 5000) }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,
-      r: Math.random() * 1.1 + 0.2,
-      depth: Math.random() * 0.6 + 0.1,          // parallax factor
-      tw: Math.random() * Math.PI * 2,           // twinkle phase
-      ts: Math.random() * 0.02 + 0.005,          // twinkle speed
-      hue: Math.random() < 0.12 ? COLORS.nebula : Math.random() < 0.08 ? COLORS.ember : [255, 255, 255],
+      r: Math.random() * 0.9 + 0.2,
+      a: Math.random() * 0.35 + 0.1,
+      depth: Math.random() * 0.5 + 0.1,
+      tw: Math.random() * Math.PI * 2,
     }));
-
-    const count = Math.max(28, Math.min(90, Math.round(area / 16000)));
+    const count = Math.max(18, Math.min(48, Math.round(area / 28000)));
     neurons = Array.from({ length: count }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
-      r: Math.random() * 1.4 + 1.1,
-      charge: 0,                                  // glow after firing
-      refractory: 0,                              // frames before it can fire again
-      color: Math.random() < 0.7 ? COLORS.synapse : COLORS.nebula,
+      vx: (Math.random() - 0.5) * 0.08,
+      vy: (Math.random() - 0.5) * 0.08,
+      r: Math.random() * 0.8 + 1,
+      glow: 0,          // proximity to cursor (0–1), eased
+      charge: 0,        // brightness after firing, decays
+      refractory: 0,
     }));
     signals = [];
   }
 
   function neighbours(i) {
-    const a = neurons[i];
-    const out = [];
-    for (let j = 0; j < neurons.length; j++) {
-      if (j === i) continue;
-      const b = neurons[j];
-      const dx = a.x - b.x, dy = a.y - b.y;
-      if (dx * dx + dy * dy < linkDist * linkDist) out.push(j);
-    }
+    const a = neurons[i], out = [];
+    neurons.forEach((b, j) => {
+      if (j !== i && (a.x - b.x) ** 2 + (a.y - b.y) ** 2 < linkDist * linkDist) out.push(j);
+    });
     return out;
   }
 
-  function fire(i, generation = 0) {
+  function fire(i, gen, maxGen) {
     const n = neurons[i];
     if (n.refractory > 0) return;
     n.charge = 1;
-    n.refractory = 90;
-    const targets = neighbours(i);
-    // Fire along a few random dendrites
-    targets.sort(() => Math.random() - 0.5).slice(0, 2 + (Math.random() * 2) | 0).forEach((j) => {
-      signals.push({ from: i, to: j, t: 0, speed: 0.012 + Math.random() * 0.012, gen: generation });
-    });
+    n.refractory = 120;
+    neighbours(i)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 2)
+      .forEach((j) => signals.push({ from: i, to: j, t: 0, speed: 0.02, gen, maxGen }));
+    wake();
   }
 
-  function spawnMeteor() {
-    const fromLeft = Math.random() < 0.5;
-    meteors.push({
-      x: fromLeft ? Math.random() * W * 0.5 : W * 0.5 + Math.random() * W * 0.5,
-      y: Math.random() * H * 0.4,
-      vx: (fromLeft ? 1 : -1) * (6 + Math.random() * 4),
-      vy: 2.5 + Math.random() * 2,
-      life: 1,
-    });
-  }
-
-  let frame = 0;
-  function draw() {
-    frame++;
+  function step() {
     ctx.clearRect(0, 0, W, H);
+    const now = performance.now();
+    const mouseMoving = mouse.active && now - mouse.lastMove < 120;
 
-    /* Stars, with gentle scroll parallax */
+    // Stars: static, with a barely perceptible shimmer
     for (const s of stars) {
-      s.tw += s.ts;
-      const a = 0.35 + Math.sin(s.tw) * 0.3 + 0.3;
-      let y = (s.y - scrollY * s.depth * 0.15) % H;
+      s.tw += 0.006;
+      let y = (s.y - scrollY * s.depth * 0.1) % H;
       if (y < 0) y += H;
-      ctx.fillStyle = rgba(s.hue, a * 0.85);
+      ctx.fillStyle = `rgba(255,255,255,${s.a * (0.85 + Math.sin(s.tw) * 0.15)})`;
       ctx.beginPath();
       ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    /* Move neurons */
-    for (const n of neurons) {
-      n.x += n.vx;
-      n.y += n.vy;
+    // Neurons: slow drift, cursor proximity
+    neurons.forEach((n, i) => {
+      n.x += n.vx; n.y += n.vy;
       if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
       if (n.y < -20) n.y = H + 20; else if (n.y > H + 20) n.y = -20;
-      n.charge *= 0.965;
-      if (n.refractory > 0) n.refractory--;
 
-      // Cursor excites nearby neurons
+      let target = 0;
       if (mouse.active) {
-        const dx = n.x - mouse.x, dy = n.y - mouse.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 120 * 120) {
-          if (d2 < 70 * 70 && Math.random() < 0.04) fire(neurons.indexOf(n));
-          // slight attraction — like a gravity well
-          n.vx -= dx * 0.00003;
-          n.vy -= dy * 0.00003;
-        }
+        const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+        if (d < HOVER_R) target = 1 - d / HOVER_R;
+        if (d < FIRE_R && mouseMoving) fire(i, 0, 1);
       }
-      // Speed limit
-      const sp = Math.hypot(n.vx, n.vy);
-      if (sp > 0.45) { n.vx *= 0.45 / sp; n.vy *= 0.45 / sp; }
-    }
+      n.glow += (target - n.glow) * 0.12;
+      n.charge *= 0.95;
+      if (n.refractory > 0) n.refractory--;
+    });
 
-    /* Dendrites */
+    // Links between neurons
     ctx.lineWidth = 0.6;
     for (let i = 0; i < neurons.length; i++) {
       const a = neurons[i];
       for (let j = i + 1; j < neurons.length; j++) {
         const b = neurons[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 > linkDist * linkDist) continue;
-        const k = 1 - Math.sqrt(d2) / linkDist;
-        const boost = Math.max(a.charge, b.charge);
-        ctx.strokeStyle = rgba(COLORS.synapse, k * 0.13 + boost * k * 0.35);
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d > linkDist) continue;
+        const k = 1 - d / linkDist;
+        const lit = Math.max(Math.min(a.glow, b.glow), a.charge, b.charge);
+        ctx.strokeStyle = rgba(ACCENT, k * (0.06 + lit * 0.5));
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
     }
 
-    /* Signals travelling along dendrites */
-    for (let s = signals.length - 1; s >= 0; s--) {
-      const sig = signals[s];
+    // Links from cursor to nearby neurons
+    if (mouse.active) {
+      for (const n of neurons) {
+        if (n.glow < 0.02) continue;
+        ctx.strokeStyle = rgba(ACCENT, n.glow * 0.45);
+        ctx.beginPath(); ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(n.x, n.y); ctx.stroke();
+      }
+    }
+
+    // Signals
+    for (let k = signals.length - 1; k >= 0; k--) {
+      const sig = signals[k];
       const a = neurons[sig.from], b = neurons[sig.to];
       sig.t += sig.speed;
       if (sig.t >= 1) {
-        signals.splice(s, 1);
-        // Propagate with decaying probability
-        if (sig.gen < 4 && Math.random() < 0.55 - sig.gen * 0.1) fire(sig.to, sig.gen + 1);
-        else b.charge = Math.max(b.charge, 0.6);
+        signals.splice(k, 1);
+        if (sig.gen < sig.maxGen) fire(sig.to, sig.gen + 1, sig.maxGen);
+        else b.charge = Math.max(b.charge, 0.5);
         continue;
       }
-      const x = a.x + (b.x - a.x) * sig.t;
-      const y = a.y + (b.y - a.y) * sig.t;
-      // tail
-      const tx = a.x + (b.x - a.x) * Math.max(0, sig.t - 0.12);
-      const ty = a.y + (b.y - a.y) * Math.max(0, sig.t - 0.12);
-      const grad = ctx.createLinearGradient(tx, ty, x, y);
-      grad.addColorStop(0, rgba(COLORS.ember, 0));
-      grad.addColorStop(1, rgba(COLORS.ember, 0.9));
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.moveTo(tx, ty);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      ctx.fillStyle = rgba(COLORS.ember, 1);
-      ctx.beginPath();
-      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
-      ctx.fill();
+      const x = a.x + (b.x - a.x) * sig.t, y = a.y + (b.y - a.y) * sig.t;
+      const t0 = Math.max(0, sig.t - 0.15);
+      const tx = a.x + (b.x - a.x) * t0, ty = a.y + (b.y - a.y) * t0;
+      const g = ctx.createLinearGradient(tx, ty, x, y);
+      g.addColorStop(0, rgba(SIGNAL, 0));
+      g.addColorStop(1, rgba(SIGNAL, 0.7));
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+      ctx.lineWidth = 0.6;
     }
 
-    /* Neuron bodies */
+    // Neuron bodies
     for (const n of neurons) {
-      const glow = 6 + n.charge * 18;
-      const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glow);
-      g.addColorStop(0, rgba(n.charge > 0.3 ? COLORS.ember : n.color, 0.35 + n.charge * 0.5));
-      g.addColorStop(1, rgba(n.color, 0));
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, glow, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = rgba([255, 255, 255], 0.75 + n.charge * 0.25);
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r + n.charge * 1.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    /* Meteors */
-    for (let m = meteors.length - 1; m >= 0; m--) {
-      const met = meteors[m];
-      met.x += met.vx;
-      met.y += met.vy;
-      met.life -= 0.012;
-      if (met.life <= 0) { meteors.splice(m, 1); continue; }
-      const grad = ctx.createLinearGradient(met.x, met.y, met.x - met.vx * 14, met.y - met.vy * 14);
-      grad.addColorStop(0, `rgba(255,255,255,${met.life})`);
-      grad.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(met.x, met.y);
-      ctx.lineTo(met.x - met.vx * 14, met.y - met.vy * 14);
-      ctx.stroke();
-    }
-
-    /* Spontaneous activity */
-    if (frame % 70 === 0) fire((Math.random() * neurons.length) | 0);
-    if (Math.random() < 0.0025) spawnMeteor();
-
-    requestAnimationFrame(draw);
-  }
-
-  function drawStatic() {
-    // Reduced motion: a single still frame of the network
-    ctx.clearRect(0, 0, W, H);
-    for (const s of stars) {
-      ctx.fillStyle = rgba(s.hue, 0.6);
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.lineWidth = 0.6;
-    for (let i = 0; i < neurons.length; i++) {
-      for (let j = i + 1; j < neurons.length; j++) {
-        const a = neurons[i], b = neurons[j];
-        const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d > linkDist) continue;
-        ctx.strokeStyle = rgba(COLORS.synapse, (1 - d / linkDist) * 0.15);
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
+      const lit = Math.max(n.glow, n.charge);
+      if (lit > 0.02) {
+        const R = 4 + lit * 10;
+        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, R);
+        g.addColorStop(0, rgba(n.charge > n.glow ? SIGNAL : ACCENT, 0.35 * lit));
+        g.addColorStop(1, rgba(ACCENT, 0));
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(n.x, n.y, R, 0, Math.PI * 2); ctx.fill();
       }
+      ctx.fillStyle = `rgba(255,255,255,${0.35 + lit * 0.55})`;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
     }
-    for (const n of neurons) {
-      ctx.fillStyle = "rgba(255,255,255,0.8)";
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
+
   }
+
+  // Animate continuously (the drift is slow and cheap), but skip work when the tab is hidden
+  function loop() {
+    if (document.hidden) { running = false; return; }
+    step();
+    requestAnimationFrame(loop);
+  }
+  function wake() {
+    if (reduceMotion || running) return;
+    running = true;
+    requestAnimationFrame(loop);
+  }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) wake(); });
 
   let resizeTimer;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { resize(); if (reduceMotion) drawStatic(); }, 150);
+    resizeTimer = setTimeout(() => { resize(); if (reduceMotion) step(); }, 150);
   });
   window.addEventListener("pointermove", (e) => {
-    mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+    if (e.pointerType === "touch") return;
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    mouse.active = true; mouse.lastMove = performance.now();
   }, { passive: true });
-  window.addEventListener("pointerleave", () => { mouse.active = false; });
-  document.addEventListener("mouseleave", () => { mouse.active = false; });
+  document.documentElement.addEventListener("pointerleave", () => { mouse.active = false; });
+  window.addEventListener("blur", () => { mouse.active = false; });
   window.addEventListener("click", (e) => {
-    // Clicking the sky fires the nearest neuron
-    if (e.target.closest("a, button")) return;
+    if (e.target.closest("a, button, input, textarea")) return;
     let best = -1, bestD = Infinity;
     neurons.forEach((n, i) => {
       const d = Math.hypot(n.x - e.clientX, n.y - e.clientY);
       if (d < bestD) { bestD = d; best = i; }
     });
-    if (best >= 0 && bestD < 200) { neurons[best].refractory = 0; fire(best); }
+    if (best >= 0 && bestD < 250) { neurons[best].refractory = 0; fire(best, 0, 3); }
   });
 
   resize();
-  if (reduceMotion) drawStatic();
-  else requestAnimationFrame(draw);
+  if (reduceMotion) step();
+  else wake();
 
   /* ───────── Nav ───────── */
   const nav = document.getElementById("nav");
