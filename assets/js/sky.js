@@ -452,7 +452,7 @@
     // Background stars: hyperspace streaks during the entrance, then parallax points
     const cx0 = W / 2, cy0 = H / 2;
     const warp = reduceMotion ? 0 : 1 - easeOut(introT * 1.6);
-    const toSky = skyCamera(cam.yaw, lerp(0.97, cam.tilt, intro));   // sweeps down with the opening tilt
+    const toSky = skyCamera(cam.yaw, cam.tilt);      // the sky holds still during the entrance; only the planets swing in
     for (const s of stars) {
       const q = toSky(s.d);
       if (!q) continue;
