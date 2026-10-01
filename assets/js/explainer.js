@@ -157,13 +157,13 @@
   /* ───────── SVG fallback (no WebGL) ───────── */
   function svgFallback(pct) {
     const tcr = $("tcrGroup"), bond = $("tcrBond");
-    if (!tcr || $("tcrSvg").hidden) return;
+    if (!tcr || $("tcrSvg").hasAttribute("hidden")) return;
     tcr.style.transform = `translateY(${((pct - 50) / 42) * 9}px)`;
     bond.setAttribute("opacity", (0.1 + (pct / 100) * 0.9).toFixed(2));
   }
   function showFallback(reason) {
     $("tcrMol").hidden = true;
-    $("tcrSvg").hidden = false;
+    $("tcrSvg").removeAttribute("hidden");   // SVG elements have no .hidden property
     console.info("3D structure unavailable, showing schematic:", reason);
     render();
   }

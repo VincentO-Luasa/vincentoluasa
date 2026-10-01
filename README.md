@@ -31,4 +31,5 @@ Placeholders awaiting real content are marked with `class="ph"` in `index.html`
 
 ## Deploy
 
-GitHub Pages: Settings → Pages → Deploy from branch → `main` / root.
+Live at **https://vincento-luasa.github.io/vincentoluasa/** (GitHub Pages, `main` / root).
+Every push to `main` redeploys automatically within a minute or two.
