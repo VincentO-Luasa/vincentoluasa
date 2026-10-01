@@ -900,8 +900,28 @@ code { font-family: var(--font-mono); font-size: 0.92em; color: var(--ember); }
 .race__bar.is-best { background: #6fcf97; }
 
 /* ───────── Off the clock ───────── */
-.life-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.life-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .life-tile { margin: 0; }
+.life-tile__img { position: relative; }
+.life-tile__me {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+.life-tile__me span {
+  position: absolute;
+  top: calc(100% + 4px); left: 50%;
+  transform: translateX(-50%);
+  font: 500 11px var(--font-mono);
+  color: #fff;
+  background: rgba(5, 6, 15, 0.7);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
 .life-tile img, .life-tile__ph {
   width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 40%;
   border-radius: 14px; border: 1px solid var(--border);
@@ -955,7 +975,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; color: var(--ember); }
 @media (max-width: 960px) {
   .edu, .explainer, .notebook { grid-template-columns: 1fr; gap: 44px; }
   .lab-panel, .notebook__intro { position: static; }
-  .life-grid { grid-template-columns: 1fr 1fr; }
+
   .intro__grid { grid-template-columns: 1fr; gap: 48px; }
   .portrait { max-width: 420px; }
 
@@ -967,6 +987,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; color: var(--ember); }
 @media (max-width: 760px) {
   body { font-size: 16px; }
   .intro { padding-top: 120px; }
+  .life-grid { grid-template-columns: 1fr; max-width: 420px; }
   .now dl div { grid-template-columns: 1fr; gap: 2px; }
   #pgCanvas { height: 380px; }
   .pg__info { grid-template-columns: 1fr; }
