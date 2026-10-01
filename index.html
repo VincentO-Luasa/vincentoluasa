@@ -49,15 +49,15 @@
             Hi, I’m Vincent. Currently trying to <em>cure cancer</em> at InstaDeep.
           </p>
           <p class="intro__bio reveal">
-            I build deep-learning models that predict how T-cell receptors bind to cancer targets,
-            and I’m testing whether Claude can run a research project entirely on its own.
+            I build deep-learning models that help T cells, the immune system’s hunters, recognise
+            cancer cells, and I’m testing whether Claude can run a research project entirely on its own.
             Robotics engineer by training. Outside work: years of calisthenics, a brand-new love of climbing, a lot of cooking, and an eye on the stars.
           </p>
 
           <div class="now reveal" aria-label="What I'm doing now">
             <div class="now__head"><span class="now__title">Now</span><span class="now__date">October 2026</span></div>
             <dl>
-              <div><dt>Working on</dt><dd>Binding-affinity models for TCR–pMHC</dd></div>
+              <div><dt>Working on</dt><dd>Models that help T cells spot cancer</dd></div>
               <div><dt>Experimenting</dt><dd>Claude as a full-time research colleague</dd></div>
               <div><dt>Learning</dt><dd>Climbing, since this summer</dd></div>
               <div><dt>Next summit</dt><dd><span class="ph" title="Placeholder: replace with your own content">your next climb or hike</span></dd></div>
@@ -109,7 +109,7 @@
         <ol class="explainer__steps reveal">
           <li>
             <h3>T cells patrol your body</h3>
-            <p>Each T cell carries a receptor (the <strong>TCR</strong>) that inspects small protein fragments, <strong>peptides</strong>, displayed by <strong>MHC</strong> molecules on the surface of every cell.</p>
+            <p>T cells are white blood cells that hunt down infected and cancerous cells. To tell friend from foe, each one uses a receptor (the <strong>TCR</strong>) to inspect small protein fragments, <strong>peptides</strong>, that every cell displays on its surface in a holder called <strong>MHC</strong>.</p>
           </li>
           <li>
             <h3>Cancer cells show abnormal peptides</h3>
@@ -121,17 +121,32 @@
           </li>
           <li>
             <h3>My models predict which ones work</h3>
-            <p>I train deep-learning models to predict how each mutation changes <strong>TCR–pMHC</strong> binding, so the lab tests the most promising candidates first. Try it yourself →</p>
+            <p>I train deep-learning models to predict how each mutation changes the grip between the receptor and the peptide in its holder (<strong>TCR–pMHC binding</strong>, in the jargon), so the lab tests the most promising candidates first. Try it yourself →</p>
           </li>
         </ol>
 
         <div class="lab-panel reveal" id="tcrDemo">
           <div class="lab-panel__top">
-            <span class="lab-panel__label">Interactive · TCR–pMHC</span>
+            <span class="lab-panel__label">Interactive · real 3D structure</span>
             <button class="chip-btn" id="tcrReset" type="button">Reset</button>
           </div>
 
-          <svg class="tcr-svg" viewBox="0 0 400 250" role="img" aria-labelledby="tcrSvgTitle">
+          <div class="mol" id="tcrMol">
+            <div class="mol__viewer" id="tcrViewer" role="img" aria-label="3D structure of a T-cell receptor gripping a cancer peptide held by an MHC molecule. Drag to rotate."></div>
+            <p class="mol__status" id="tcrMolStatus">Loading the 3D structure…</p>
+            <div class="mol__controls">
+              <button type="button" class="chip-btn" id="molSpin" aria-pressed="true">Pause spin</button>
+              <button type="button" class="chip-btn" id="molReset">Reset view</button>
+            </div>
+            <ul class="mol__legend" aria-hidden="true">
+              <li><i style="background:#3f7383"></i><i style="background:#76afc0"></i>T-cell receptor</li>
+              <li><i style="background:#ffffff"></i>CDR3β loop</li>
+              <li><i style="background:#e2c48f"></i>cancer peptide</li>
+              <li><i style="background:#8f8bbd"></i>MHC holder</li>
+            </ul>
+          </div>
+
+          <svg class="tcr-svg" id="tcrSvg" hidden viewBox="0 0 400 250" role="img" aria-labelledby="tcrSvgTitle">
             <title id="tcrSvgTitle">Schematic of a T-cell receptor approaching a peptide presented by an MHC molecule on a cancer cell</title>
             <defs>
               <linearGradient id="bondGlow" x1="0" x2="0" y1="0" y2="1">
@@ -166,7 +181,7 @@
             <text class="tcr-svg__cell" x="16" y="246">Cancer cell</text>
           </svg>
 
-          <p class="lab-panel__hint">Peptide <code>SLLMWITQC</code> (NY-ESO-1, a cancer antigen) on HLA-A*02:01. Click a residue of the TCR’s CDR3β loop to mutate it.</p>
+          <p class="lab-panel__hint">Drag to rotate. The receptor’s CDR3β loop (white) grips the cancer peptide <code>SLLMWITQC</code> (NY-ESO-1). Click a residue below, or on the loop, to mutate it.</p>
 
           <div class="seq" id="tcrSeq" role="group" aria-label="CDR3 beta sequence"></div>
           <div class="aa-picker" id="tcrPicker" hidden>
@@ -188,7 +203,7 @@
             <button class="chip-btn chip-btn--accent" id="tcrBest" type="button">Ask the model for the best single mutation</button>
           </div>
           <p class="lab-panel__note" id="tcrSpace">This loop has <strong>11</strong> mutable positions: 209 possible single mutants, ~21,000 doubles, ~1.3 million triples. Too many to test in a lab, which is why we predict.</p>
-          <p class="lab-panel__disclaimer">Illustration with toy scores, not real model predictions.</p>
+          <p class="lab-panel__disclaimer">Structure: PDB 2BNR (1G4 TCR · NY-ESO-1 · HLA-A*02:01). Binding scores are a toy illustration, not real model predictions.</p>
         </div>
       </div>
     </section>
@@ -506,7 +521,7 @@
             <img src="assets/img/climbing.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Climbers on a tall limestone cliff under a deep blue sky; Vincent, in black, is near the top." />
             <span class="life-tile__me" style="left: 48%; top: 27%;" aria-hidden="true"><span>me</span></span>
           </div>
-          <figcaption><strong>Climbing</strong> New since this summer. That’s me in black, at the top of the cliff.</figcaption>
+          <figcaption><strong>Climbing</strong> New since this summer. That’s me in black, trying not to fall.</figcaption>
         </figure>
         <figure class="life-tile reveal">
           <img src="assets/img/wok-sesame-beef.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Sesame beef stir-fry with snow peas, carrots and onion in a wok." />
@@ -518,7 +533,7 @@
         <li><strong>Neuroscience</strong>studied at CentraleSupélec and online</li>
         <li><strong>Space</strong>a lifelong fascination (try pressing <kbd>S</kbd>)</li>
         <li><strong>Piano</strong>for the evenings</li>
-        <li><strong>Running &amp; swimming</strong>for the mornings</li>
+        <li><strong>Running</strong>for the mornings</li>
         <li><strong>Teaching</strong>volunteer mathematics teacher</li>
       </ul>
     </section>

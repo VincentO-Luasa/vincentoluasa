@@ -788,7 +788,25 @@ code { font-family: var(--font-mono); font-size: 0.92em; color: var(--ember); }
 .lab-panel__note strong { color: var(--text); font-weight: 500; }
 .lab-panel__disclaimer { font-size: 11.5px; color: var(--faint); margin-top: 8px; font-family: var(--font-mono); }
 
+.mol { position: relative; margin: 4px -6px 0; }
+.mol__viewer {
+  position: relative;
+  width: 100%; height: 340px;
+  border-radius: 12px;
+  background: radial-gradient(70% 70% at 50% 45%, rgba(140, 200, 217, 0.07), transparent 70%);
+  overflow: hidden;
+  cursor: grab;
+}
+.mol__viewer:active { cursor: grabbing; }
+.mol__status { position: absolute; inset: 0; display: grid; place-items: center; font: 12px var(--font-mono); color: var(--faint); pointer-events: none; }
+.mol__status[hidden] { display: none; }
+.mol__controls { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; }
+.mol__controls .chip-btn { padding: 6px 10px; font-size: 12px; background: rgba(5, 6, 15, 0.7); }
+.mol__legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 6px 6px 0; font: 11px var(--font-mono); color: var(--muted); }
+.mol__legend li { display: inline-flex; align-items: center; gap: 4px; }
+.mol__legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
 .tcr-svg { width: 100%; height: auto; }
+.tcr-svg[hidden] { display: none; }
 .tcr-svg__membrane { fill: none; stroke: var(--border-strong); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; }
 .tcr-svg__cell { font: 11px var(--font-mono); fill: var(--faint); }
 .tcr-svg__chain { fill: rgba(140, 200, 217, 0.12); stroke: var(--synapse); stroke-width: 1.4; }
@@ -990,6 +1008,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; color: var(--ember); }
   .life-grid { grid-template-columns: 1fr; max-width: 420px; }
   .now dl div { grid-template-columns: 1fr; gap: 2px; }
   #pgCanvas { height: 380px; }
+  .mol__viewer { height: 300px; }
   .pg__info { grid-template-columns: 1fr; }
   .pg__stats { text-align: left; white-space: normal; }
   .race { min-width: 0; }
