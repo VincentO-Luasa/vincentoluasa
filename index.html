@@ -528,11 +528,14 @@
         <h2>The brain &amp; the cosmos</h2>
         <span class="section__rule"></span>
       </div>
-      <p class="section__intro reveal">Two frontiers I never get tired of: the hundred billion neurons inside our heads, and the hundred billion stars above them. I studied neuroscience at CentraleSupélec and online, and I’ve been looking up for as long as I can remember.</p>
+      <p class="section__intro reveal">Two frontiers I never get tired of: the eighty-six billion neurons inside our heads, and the hundreds of billions of stars above them. I studied neuroscience at CentraleSupélec and online, and I’ve been looking up for as long as I can remember.</p>
 
       <div class="frontiers">
         <article class="frontier frontier--brain reveal" id="brain">
-          <p class="frontier__kicker">The brain · live simulation</p>
+          <div class="frontier__top">
+            <p class="frontier__kicker">The brain · live simulation</p>
+            <button type="button" class="btn btn--primary btn--sm" data-open-brain>Explore the brain 🧠</button>
+          </div>
           <h3>Make a neuron fire</h3>
           <p class="frontier__text">This is the <strong>Hodgkin–Huxley model</strong> (1952), the Nobel-winning equations behind every action potential: sodium rushes in, potassium flows out, and the voltage spikes. Turn up the input current and watch the neuron go from silent to firing rhythmically. Each spike also fires a neuron in this page’s background.</p>
           <div class="hh">
@@ -559,7 +562,7 @@
           <p class="frontier__text">A solar system with orbital speeds to scale (Earth takes 24 seconds per lap), 13 constellations, and a fact for every planet. Drag to rotate, scroll to zoom, click a planet to fly to it.</p>
           <canvas id="miniOrrery" class="mini-orrery" aria-hidden="true"></canvas>
           <button type="button" class="btn btn--primary" data-open-sky>Open the sky ✦</button>
-          <p class="frontier__note">Or press <kbd>S</kbd> anywhere on the site.</p>
+          <p class="frontier__note">Or press <kbd>S</kbd> anywhere on the site (and <kbd>B</kbd> for a digital brain).</p>
         </article>
       </div>
     </section>
@@ -623,7 +626,7 @@
 
   <footer class="footer">
     <p>© <span id="year"></span> Vincent O’Luasa</p>
-    <p class="footer__hint">Paris, France · <button type="button" class="link-btn" data-open-sky>psst, press <kbd>S</kbd> for the sky ✦</button></p>
+    <p class="footer__hint">Paris, France · <button type="button" class="link-btn" data-open-sky>psst, press <kbd>S</kbd> for the sky ✦</button> · <button type="button" class="link-btn" data-open-brain><kbd>B</kbd> for the brain 🧠</button></p>
   </footer>
 
   <div class="sky" id="sky" hidden role="dialog" aria-modal="true" aria-label="The Solar System and constellations">
@@ -639,9 +642,23 @@
     <div class="sky__card" id="skyCard" hidden aria-live="polite"></div>
   </div>
 
+  <div class="sky brain" id="brainMode" hidden role="dialog" aria-modal="true" aria-label="A digital human brain">
+    <canvas aria-hidden="true"></canvas>
+    <div class="sky__head">
+      <p class="sky__title">The human brain</p>
+      <p class="sky__hint" id="brainHint">Drag to rotate, scroll to zoom, click a region to explore it.</p>
+    </div>
+    <div class="sky__actions">
+      <button type="button" class="chip-btn brain__reset">Reset view</button>
+      <button type="button" class="chip-btn brain__close">Close <kbd>B</kbd></button>
+    </div>
+    <div class="sky__card" id="brainCard" hidden aria-live="polite"></div>
+  </div>
+
   <script src="assets/js/main.js"></script>
   <script src="assets/js/sky.js"></script>
   <script src="assets/js/neuron.js"></script>
+  <script src="assets/js/brain.js"></script>
   <script src="assets/js/explainer.js"></script>
   <script src="assets/js/playground.js"></script>
   <script src="assets/js/notebook.js"></script>

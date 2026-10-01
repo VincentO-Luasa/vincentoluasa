@@ -392,7 +392,10 @@
   window.addEventListener("resize", () => { if (open) resize(); });
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest("input, textarea, [contenteditable]")) return;
-    if (e.key === "s" || e.key === "S") setOpen(!open);
+    if (e.key === "s" || e.key === "S") {
+      if (!open && document.body.classList.contains("sky-open")) return;   // brain mode is open
+      setOpen(!open);
+    }
     else if (e.key === "Escape" && open) { if (selected) unfocus(); else setOpen(false); }
     else if (open && (e.key === "+" || e.key === "=")) zoomAt(1.25, W / 2, H / 2);
     else if (open && e.key === "-") zoomAt(0.8, W / 2, H / 2);

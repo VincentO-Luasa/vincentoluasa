@@ -25,6 +25,7 @@ assets/js/playground.js graph-search playground (BFS, DFS, Dijkstra, A*, greedy,
 assets/js/notebook.js   lab-notebook progress chart
 assets/js/sky.js        sky mode (press S): animated solar system + constellations
 assets/js/neuron.js     Hodgkin–Huxley "make a neuron fire" demo + mini orrery
+assets/js/brain.js      brain mode (press B): 3D digital brain with firing neurons
 ```
 
 Placeholders awaiting real content are marked with `class="ph"` in `index.html`
