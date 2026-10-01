@@ -297,40 +297,92 @@
           <p class="notebook__kicker">Side project · InstaDeep · ongoing</p>
           <h3 class="notebook__question">Can an AI agent do research like a full-time employee?</h3>
           <p>
-            I handed Claude an inverse-folding project (training models from scratch to propose enhanced
-            mutants) and pushed it to work completely autonomously: running the research loop itself, with as
-            little hand-holding from me as possible. These are notes from along the way.
+            I gave Claude a protein inverse-folding model, a goal (beat ProteinMPNN, a strong
+            published baseline) and a set of instructions, then let it run the research loop
+            on its own: coming up with ideas, writing the code, training, analysing the results,
+            and committing every experiment to GitHub. My job was to improve its instructions.
           </p>
+          <ol class="loop" aria-label="The research loop">
+            <li>Ideate</li><li>Implement</li><li>Train</li><li>Analyse</li>
+          </ol>
           <dl class="notebook__facts">
             <div><dt>Researcher</dt><dd>Claude</dd></div>
             <div><dt>Supervisor</dt><dd>me</dd></div>
-            <div><dt>Task</dt><dd>Inverse folding for enhanced-mutant proposal</dd></div>
-            <div><dt>Status</dt><dd><span class="status-dot status-dot--amber"></span>In progress</dd></div>
+            <div><dt>Experiments</dt><dd>54 run · 31 kept</dd></div>
+            <div><dt>Status</dt><dd><span class="status-dot"></span>Baseline beaten</dd></div>
           </dl>
         </div>
 
-        <ol class="notebook__log">
-          <li class="entry reveal">
-            <span class="entry__tag">Entry 01</span>
-            <h4><span class="ph" title="Placeholder: replace with your own content">Title: e.g. the setup and first instructions</span></h4>
-            <p><span class="ph" title="Placeholder: replace with your own content">What you gave Claude at the start, and what it did first.</span></p>
-          </li>
-          <li class="entry reveal">
-            <span class="entry__tag">Entry 02</span>
-            <h4><span class="ph" title="Placeholder: replace with your own content">Title: a moment that surprised you</span></h4>
-            <p><span class="ph" title="Placeholder: replace with your own content">Something Claude did that you didn’t expect, good or bad.</span></p>
-          </li>
-          <li class="entry reveal">
-            <span class="entry__tag">Entry 03</span>
-            <h4><span class="ph" title="Placeholder: replace with your own content">Title: where it got stuck</span></h4>
-            <p><span class="ph" title="Placeholder: replace with your own content">A failure mode, and how (or whether) it recovered.</span></p>
-          </li>
-          <li class="entry entry--next reveal">
-            <span class="entry__tag">Next</span>
-            <h4><span class="ph" title="Placeholder: replace with your own content">What you’re trying next</span></h4>
-            <p><span class="ph" title="Placeholder: replace with your own content">Your current verdict: is it a colleague yet?</span></p>
-          </li>
-        </ol>
+        <div class="notebook__body">
+          <figure class="run-chart reveal" id="runChart">
+            <figcaption>
+              <span class="run-chart__title">54 experiments, one curve</span>
+              <span class="run-chart__sub">Best validation score so far by experiment number (sequence recovery, higher is better). Hover the points.</span>
+            </figcaption>
+            <div class="run-chart__plot" id="runChartPlot"></div>
+            <details class="run-chart__table">
+              <summary>View as table</summary>
+              <table id="runChartTable"><thead><tr><th>Experiment</th><th>Best score</th><th>What changed</th></tr></thead><tbody></tbody></table>
+            </details>
+          </figure>
+
+          <ol class="notebook__log">
+            <li class="entry reveal">
+              <span class="entry__tag">Protocol v1 · Bootstrap</span>
+              <h4>“Loop forever. Never stop.”</h4>
+              <p>The first brief was simple: a flat list of about twenty ideas, long 100-epoch runs, and the test score as the target. Then keep going.</p>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">v2 · Persistence</span>
+              <h4>Working while I sleep</h4>
+              <p>Claude now pushes to git after every experiment, and the brief frames it as working autonomously while I’m asleep: around a hundred experiments overnight.</p>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">v3 · Observability</span>
+              <h4>Plot everything</h4>
+              <p>After every run, it updates a progress plot (kept, discarded or crashed) in a fixed log format, so both of us can see where the research is going.</p>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">v4 · Richer feedback</span>
+              <h4>Shorter runs, better signals</h4>
+              <p>Per-epoch curves with the ProteinMPNN baseline drawn in, runs cut from 100 to 10 epochs, and fresh ideas pulled from research papers instead of a fixed list.</p>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">v5 · Active monitoring</span>
+              <h4>Knowing when to give up</h4>
+              <p>Training runs in the background while Claude schedules its own check-ins and applies five early-stopping rules:</p>
+              <ul class="bullets">
+                <li>stagnation</li>
+                <li>overfitting</li>
+                <li>a low ceiling</li>
+                <li>collapse</li>
+                <li>falling behind the best run</li>
+              </ul>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">v6 · Two-phase strategy</span>
+              <h4>Probe fast, then commit</h4>
+              <p>Quick 5-epoch probes first, to beat a 5-epoch ProteinMPNN. Then 50+ epoch runs to beat the fully pretrained one. Ideas are organised by axis, with explicit permission to be bold.</p>
+            </li>
+            <li class="entry reveal">
+              <span class="entry__tag">Experiment 32 · A course correction</span>
+              <h4>Choosing the right yardstick</h4>
+              <p>Mid-loop, we found that the quick evaluation underestimated the full one, and that chasing test scores made decisions slow and noisy. The validation score became the decision metric, with the test set kept for reference only.</p>
+            </li>
+            <li class="entry entry--verdict reveal">
+              <span class="entry__tag">So far · What I learned</span>
+              <h4>Baseline beaten, on its own</h4>
+              <p>After extensive autonomous experimentation, Claude found a configuration that beats ProteinMPNN. Along the way:</p>
+              <ul class="bullets">
+                <li>An AI researcher needs a clear objective and explicit constraints to work well.</li>
+                <li>A human still needs to step in now and then to steer the protocol.</li>
+                <li>The engineering takes care of itself: commits, plots, monitoring.</li>
+                <li>A better score doesn’t guarantee better proteins: generalising zero-shot to tasks like binding or stability is still the hard part.</li>
+                <li>Next round: point it at feature engineering and architecture, not training settings.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -562,5 +614,6 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/explainer.js"></script>
   <script src="assets/js/playground.js"></script>
+  <script src="assets/js/notebook.js"></script>
 </body>
 </html>
