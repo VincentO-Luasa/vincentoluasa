@@ -214,6 +214,14 @@
     if (best >= 0 && bestD < 250) { neurons[best].refractory = 0; fire(best, 0, 3); }
   });
 
+  // The Hodgkin–Huxley demo announces each action potential; echo it in the background network
+  document.addEventListener("neuron-spike", () => {
+    if (reduceMotion || !neurons.length) return;
+    const i = (Math.random() * neurons.length) | 0;
+    neurons[i].refractory = 0;
+    fire(i, 0, 2);
+  });
+
   resize();
   if (reduceMotion) step();
   else wake();

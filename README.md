@@ -24,6 +24,7 @@ assets/data/            2BNR interface coordinates (CC0), wrapped in JS so it lo
 assets/js/playground.js graph-search playground (BFS, DFS, Dijkstra, A*, greedy, bidirectional)
 assets/js/notebook.js   lab-notebook progress chart
 assets/js/sky.js        sky mode (press S): animated solar system + constellations
+assets/js/neuron.js     Hodgkin–Huxley "make a neuron fire" demo + mini orrery
 ```
 
 Placeholders awaiting real content are marked with `class="ph"` in `index.html`

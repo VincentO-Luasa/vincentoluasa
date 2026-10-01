@@ -521,10 +521,53 @@
       </div>
     </section>
 
+    <!-- ───────────── THE BRAIN & THE COSMOS ───────────── -->
+    <section class="section" id="frontiers">
+      <div class="section__head reveal">
+        <span class="section__index">06</span>
+        <h2>The brain &amp; the cosmos</h2>
+        <span class="section__rule"></span>
+      </div>
+      <p class="section__intro reveal">Two frontiers I never get tired of: the hundred billion neurons inside our heads, and the hundred billion stars above them. I studied neuroscience at CentraleSupélec and online, and I’ve been looking up for as long as I can remember.</p>
+
+      <div class="frontiers">
+        <article class="frontier frontier--brain reveal" id="brain">
+          <p class="frontier__kicker">The brain · live simulation</p>
+          <h3>Make a neuron fire</h3>
+          <p class="frontier__text">This is the <strong>Hodgkin–Huxley model</strong> (1952), the Nobel-winning equations behind every action potential: sodium rushes in, potassium flows out, and the voltage spikes. Turn up the input current and watch the neuron go from silent to firing rhythmically. Each spike also fires a neuron in this page’s background.</p>
+          <div class="hh">
+            <canvas id="hhCanvas" aria-label="Live membrane voltage trace of a simulated neuron"></canvas>
+          </div>
+          <div class="hh__controls">
+            <label class="hh__slider">
+              <span>Input current <output id="hhCurrentOut">0.0 µA/cm²</output></span>
+              <input type="range" id="hhCurrent" min="0" max="25" step="0.5" value="0" />
+            </label>
+            <button type="button" class="chip-btn chip-btn--accent" id="hhZap">Zap ⚡</button>
+          </div>
+          <div class="hh__gauges">
+            <div><span>Na⁺ channels</span><i><b id="hhNa"></b></i></div>
+            <div><span>K⁺ channels</span><i><b id="hhK" class="k"></b></i></div>
+            <div class="hh__rate"><span>Firing rate</span><strong id="hhRate">0 Hz</strong></div>
+          </div>
+          <p class="frontier__note">Tip: below about 6 µA/cm² the neuron fires at most once and settles, so give it a zap. Above that, it fires rhythmically, faster the harder you push. The trace runs about 18× slower than real time.</p>
+        </article>
+
+        <article class="frontier frontier--cosmos reveal">
+          <p class="frontier__kicker">The cosmos · interactive</p>
+          <h3>Open the sky</h3>
+          <p class="frontier__text">A solar system with orbital speeds to scale (Earth takes 24 seconds per lap), 13 constellations, and a fact for every planet. Drag to rotate, scroll to zoom, click a planet to fly to it.</p>
+          <canvas id="miniOrrery" class="mini-orrery" aria-hidden="true"></canvas>
+          <button type="button" class="btn btn--primary" data-open-sky>Open the sky ✦</button>
+          <p class="frontier__note">Or press <kbd>S</kbd> anywhere on the site.</p>
+        </article>
+      </div>
+    </section>
+
     <!-- ───────────── OFF THE CLOCK ───────────── -->
     <section class="section" id="life">
       <div class="section__head reveal">
-        <span class="section__index">06</span>
+        <span class="section__index">07</span>
         <h2>Off the clock</h2>
         <span class="section__rule"></span>
       </div>
@@ -549,7 +592,7 @@
       </div>
       <ul class="interests reveal">
         <li><strong>Calisthenics</strong>my longest-running habit</li>
-        <li><strong>Neuroscience</strong>studied at CentraleSupélec and online</li>
+        <li><a class="interest-btn" href="#brain"><strong>Neuroscience</strong>make a neuron fire ⚡</a></li>
         <li><button type="button" class="interest-btn" data-open-sky><strong>Space</strong>a lifelong fascination: open the sky ✦</button></li>
         <li><strong>Piano</strong>for the evenings</li>
         <li><strong>Running</strong>for the mornings</li>
@@ -598,6 +641,7 @@
 
   <script src="assets/js/main.js"></script>
   <script src="assets/js/sky.js"></script>
+  <script src="assets/js/neuron.js"></script>
   <script src="assets/js/explainer.js"></script>
   <script src="assets/js/playground.js"></script>
   <script src="assets/js/notebook.js"></script>
