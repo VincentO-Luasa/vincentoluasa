@@ -177,54 +177,6 @@
       ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
     }
 
-
-    drawConstellations();
-  }
-
-  /* ───────── Easter egg: constellations (press S) ───────── */
-  // Shapes are simplified; each sits in a box (fractions of the viewport) in the side margins.
-  const CONSTELLATIONS = [
-    { name: "Ursa Major", box: [0.015, 0.1, 0.12, 0.1],
-      stars: [[0, .1], [.02, .4], [.3, .47], [.32, .2], [.52, .18], [.72, .12], [.95, .26]],
-      lines: [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 5], [5, 6]] },
-    { name: "Cassiopeia", box: [0.87, 0.1, 0.11, 0.08],
-      stars: [[0, .2], [.25, .85], [.5, .4], [.75, .95], [1, .1]],
-      lines: [[0, 1], [1, 2], [2, 3], [3, 4]] },
-    { name: "Orion", box: [0.03, 0.5, 0.08, 0.28],
-      stars: [[.1, .12], [.75, .16], [.36, .5], [.48, .47], [.6, .44], [.2, .95], [.88, .9], [.45, 0]],
-      lines: [[0, 7], [7, 1], [0, 2], [1, 4], [2, 3], [3, 4], [2, 5], [4, 6]] },
-    { name: "Cygnus", box: [0.885, 0.5, 0.08, 0.26],
-      stars: [[.5, 0], [.5, .4], [.5, 1], [.05, .28], [.95, .52]],
-      lines: [[0, 1], [1, 2], [3, 1], [1, 4]] },
-  ];
-  let constOn = false, constAlpha = 0;
-
-  function drawConstellations() {
-    constAlpha += ((constOn ? 1 : 0) - constAlpha) * 0.06;
-    if (constAlpha < 0.01) return;
-    ctx.save();
-    ctx.font = "11px 'JetBrains Mono', monospace";
-    for (const c of CONSTELLATIONS) {
-      const [bx, by, bw, bh] = c.box;
-      const pts = c.stars.map(([x, y]) => [bx * W + x * bw * W, by * H + y * bh * H]);
-      ctx.strokeStyle = rgba(ACCENT, 0.45 * constAlpha);
-      ctx.lineWidth = 0.8;
-      for (const [a, b] of c.lines) {
-        ctx.beginPath(); ctx.moveTo(pts[a][0], pts[a][1]); ctx.lineTo(pts[b][0], pts[b][1]); ctx.stroke();
-      }
-      for (const [x, y] of pts) {
-        const g = ctx.createRadialGradient(x, y, 0, x, y, 7);
-        g.addColorStop(0, `rgba(255,255,255,${0.9 * constAlpha})`);
-        g.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
-      }
-      const lx = Math.min(...pts.map((p) => p[0]));
-      const ly = Math.max(...pts.map((p) => p[1])) + 18;
-      ctx.fillStyle = rgba(ACCENT, 0.7 * constAlpha);
-      ctx.fillText(c.name.toUpperCase(), lx, ly);
-    }
-    ctx.restore();
   }
 
   // Animate continuously (the drift is slow and cheap), but skip work when the tab is hidden
@@ -375,15 +327,10 @@
       toast("Brainstorm! Every neuron at once.");
       return;
     }
-    if (key === "s") {
-      constOn = !constOn;
-      wake();
-      toast(constOn ? "Constellations on. Press S again to hide." : "Constellations off.");
-    }
   });
 
   console.log(
-    "%cHi, curious mind 👋%c\nIf you're reading the console, we'd probably get along.\nTry pressing S on the page, or the Konami code.\nSay hello: vincent.oluasa@gmail.com",
+    "%cHi, curious mind 👋%c\nIf you're reading the console, we'd probably get along.\nTry pressing S on the page for the sky, or the Konami code.\nSay hello: vincent.oluasa@gmail.com",
     "font: 600 14px Inter, sans-serif; color: #8cc8d9;",
     "font: 12px Inter, sans-serif; color: #9aa0c3;"
   );

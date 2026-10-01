@@ -16,6 +16,7 @@
     edge: "rgba(255,255,255,0.08)",
     node: "rgba(255,255,255,0.45)",
     seen: [140, 200, 217],
+    seen2: [201, 166, 232],
     path: [217, 189, 140],
     start: "#6fcf97",
     goal: "#eb8a8a",
@@ -38,6 +39,14 @@
     astar: {
       name: "A*",
       desc: "<strong>A*</strong> is Dijkstra with a sense of direction: it favours neurons that lie towards the goal, finding the same shortest path while exploring far less.",
+    },
+    greedy: {
+      name: "Greedy",
+      desc: "<strong>Greedy best-first search</strong> always jumps to the neuron that <em>looks</em> closest to the goal and ignores the distance already travelled. Very fast, but easily lured into detours: its path is often not the shortest.",
+    },
+    bidi: {
+      name: "Bidirectional",
+      desc: "<strong>Bidirectional search</strong> launches two breadth-first waves, one from each end (blue from the start, violet from the goal), and stops as soon as they meet. Two small circles cover far less ground than one big one.",
     },
   };
 
@@ -107,8 +116,54 @@
     const prev = new Array(n).fill(-1);
     const order = [];
     const h = (i) => Math.hypot(nodes[i].x - nodes[goal].x, nodes[i].y - nodes[goal].y);
+    const fromGoal = new Set();
+    let path = null;
 
-    if (kind === "bfs" || kind === "dfs") {
+    if (kind === "bidi") {
+      // Two BFS waves, expanded alternately, until one reaches a node the other has seen
+      const prevG = new Array(n).fill(-1);
+      const seenS = new Array(n).fill(false), seenG = new Array(n).fill(false);
+      const qS = [start], qG = [goal];
+      seenS[start] = seenG[goal] = true;
+      let meet = start === goal ? start : -1;
+      while (meet < 0 && (qS.length || qG.length)) {
+        for (const side of ["S", "G"]) {
+          const q = side === "S" ? qS : qG;
+          if (meet >= 0 || !q.length) continue;
+          const u = q.shift();
+          order.push(u);
+          if (side === "G") fromGoal.add(u);
+          for (const { to } of adj[u]) {
+            const mine = side === "S" ? seenS : seenG, other = side === "S" ? seenG : seenS;
+            if (mine[to]) continue;
+            mine[to] = true;
+            (side === "S" ? prev : prevG)[to] = u;
+            if (other[to]) { meet = to; order.push(to); break; }
+            q.push(to);
+          }
+        }
+      }
+      path = [];
+      if (meet >= 0) {
+        for (let v = meet; v !== -1; v = prev[v]) path.unshift(v);
+        for (let v = prevG[meet]; v !== -1; v = prevG[v]) path.push(v);
+      }
+    } else if (kind === "greedy") {
+      // Always expand the open neuron with the smallest straight-line distance to the goal
+      const seen = new Array(n).fill(false), closed = new Array(n).fill(false);
+      const open = [start];
+      seen[start] = true;
+      while (open.length) {
+        let bi = 0;
+        for (let k = 1; k < open.length; k++) if (h(open[k]) < h(open[bi])) bi = k;
+        const u = open.splice(bi, 1)[0];
+        if (closed[u]) continue;
+        closed[u] = true;
+        order.push(u);
+        if (u === goal) break;
+        for (const { to } of adj[u]) if (!seen[to]) { seen[to] = true; prev[to] = u; open.push(to); }
+      }
+    } else if (kind === "bfs" || kind === "dfs") {
       const seen = new Array(n).fill(false);
       const list = [start];
       seen[start] = kind === "bfs";
@@ -144,13 +199,15 @@
       }
     }
 
-    const path = [];
-    for (let v = goal; v !== -1; v = prev[v]) path.unshift(v);
-    if (path[0] !== start) path.length = 0;
+    if (!path) {
+      path = [];
+      for (let v = goal; v !== -1; v = prev[v]) path.unshift(v);
+      if (path[0] !== start) path.length = 0;
+    }
     let length = 0;
     for (let i = 1; i < path.length; i++)
       length += Math.hypot(nodes[path[i]].x - nodes[path[i - 1]].x, nodes[path[i]].y - nodes[path[i - 1]].y);
-    return { kind, order, path, hops: Math.max(0, path.length - 1), length };
+    return { kind, order, path, fromGoal, hops: Math.max(0, path.length - 1), length };
   }
 
   /* ───────── Drawing ───────── */
@@ -175,7 +232,7 @@
     adj.forEach((list, a) => list.forEach(({ to }) => {
       if (to < a) return;
       const lit = seenSet.has(a) && seenSet.has(to);
-      ctx.strokeStyle = lit ? rgba(C.seen, 0.28) : C.edge;
+      ctx.strokeStyle = lit ? rgba(result.fromGoal.has(a) && result.fromGoal.has(to) ? C.seen2 : C.seen, 0.28) : C.edge;
       ctx.beginPath(); ctx.moveTo(nodes[a].x, nodes[a].y); ctx.lineTo(nodes[to].x, nodes[to].y); ctx.stroke();
     }));
 
@@ -212,12 +269,13 @@
     nodes.forEach((p, i) => {
       let r = 3, fillStyle = C.node;
       if (seenSet.has(i)) {
+        const col = result.fromGoal.has(i) ? C.seen2 : C.seen;
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 11);
-        g.addColorStop(0, rgba(C.seen, 0.45));
-        g.addColorStop(1, rgba(C.seen, 0));
+        g.addColorStop(0, rgba(col, 0.45));
+        g.addColorStop(1, rgba(col, 0));
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(p.x, p.y, 11, 0, Math.PI * 2); ctx.fill();
-        fillStyle = rgba(C.seen, 1);
+        fillStyle = rgba(col, 1);
         r = 3.5;
       }
       if (i === start || i === goal) { fillStyle = i === start ? C.start : C.goal; r = 6; }
@@ -266,13 +324,15 @@
     const maxSeen = Math.max(...results.map((r) => r.order.length));
     const bestLen = Math.min(...results.map((r) => r.length));
     const fewest = Math.min(...results.map((r) => r.order.length));
-    statsEl.innerHTML = `<div class="race">${results.map((r) => `
+    statsEl.innerHTML = `<div class="race">
+      <span></span><span></span><span class="race__h">explored</span><span class="race__h">path</span>
+      ${results.map((r) => `
       <span>${ALGOS[r.kind].name}</span>
       <span class="race__bar${r.order.length === fewest ? " is-best" : ""}" style="width:${(r.order.length / maxSeen) * 100}%"></span>
-      <span>${r.order.length} explored</span>
-      <span>${Math.abs(r.length - bestLen) < 0.5 ? "<b>shortest</b>" : `+${Math.round((r.length / bestLen - 1) * 100)}% longer`}</span>`).join("")}
+      <span>${r.order.length}</span>
+      <span>${Math.abs(r.length - bestLen) < 0.5 ? "<b>shortest</b>" : `+${Math.round((r.length / bestLen - 1) * 100)}%`}</span>`).join("")}
     </div>`;
-    descEl.innerHTML = "Same start, same goal. Bars show how many neurons each algorithm had to explore (green = fewest). A* usually explores the least while still finding the shortest path; DFS wanders.";
+    descEl.innerHTML = "Same start, same goal. Bars show how many neurons each algorithm had to explore (green = fewest). Greedy is usually the most frugal but pays with longer paths, A* finds the shortest path cheaply, bidirectional halves BFS’s work, and DFS wanders.";
     const shown = results.find((r) => r.kind === algo);
     anim = { result: shown, t0: performance.now() - 1e6, reported: true };
     kick();

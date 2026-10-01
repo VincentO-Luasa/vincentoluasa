@@ -21,7 +21,9 @@ assets/css/style.css  theme & layout
 assets/js/main.js       background neural sky, nav, scroll reveals, easter eggs
 assets/js/explainer.js  "My job in 30 seconds": TCR–pMHC mutation explorer on PDB 2BNR (3Dmol.js, toy scores)
 assets/data/            2BNR interface coordinates (CC0), wrapped in JS so it loads from file://
-assets/js/playground.js graph-search playground (BFS, DFS, Dijkstra, A*)
+assets/js/playground.js graph-search playground (BFS, DFS, Dijkstra, A*, greedy, bidirectional)
+assets/js/notebook.js   lab-notebook progress chart
+assets/js/sky.js        sky mode (press S): animated solar system + constellations
 ```
 
 Placeholders awaiting real content are marked with `class="ph"` in `index.html`

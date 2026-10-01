@@ -29,10 +29,10 @@
       </button>
       <ul class="nav__links" id="navLinks">
         <li><a href="#about">About</a></li>
-        <li><a href="#work">Work</a></li>
-        <li><a href="#lab">Lab</a></li>
-        <li><a href="#playground">Playground</a></li>
-        <li><a href="#experience">Trajectory</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#lab">Claude lab</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Career</a></li>
         <li><a href="#contact" class="nav__cta">Contact</a></li>
       </ul>
     </nav>
@@ -91,13 +91,16 @@
       </ul>
     </section>
 
-    <!-- ───────────── EXPLAINER ───────────── -->
-    <section class="section" id="explainer">
+    <!-- ───────────── RESEARCH ───────────── -->
+    <section class="section" id="research">
       <div class="section__head reveal">
         <span class="section__index">01</span>
-        <h2>My job in 30 seconds</h2>
+        <h2>AI for cancer therapy</h2>
         <span class="section__rule"></span>
       </div>
+
+      <p class="section__intro reveal">My day job in InstaDeep’s BioAI team: deep learning that predicts how proteins bind, to help design immune receptors that recognise cancer.</p>
+      <h3 class="subhead reveal" id="explainer">My job in 30 seconds</h3>
 
       <div class="explainer">
         <ol class="explainer__steps reveal">
@@ -201,19 +204,9 @@
           <p class="lab-panel__disclaimer">Structure: PDB 2BNR (1G4 TCR · NY-ESO-1 · HLA-A*02:01). Binding scores are a toy illustration, not real model predictions.</p>
         </div>
       </div>
-    </section>
 
-    <!-- ───────────── WORK ───────────── -->
-    <section class="section" id="work">
-      <div class="section__head reveal">
-        <span class="section__index">02</span>
-        <h2>Selected work</h2>
-        <span class="section__rule"></span>
-      </div>
-
-      <p class="section__intro reveal">Research themes from my current role, alongside open-source projects from my GitHub.</p>
-
-      <div class="work-grid">
+      <h3 class="subhead reveal">Research threads</h3>
+      <div class="research-grid">
         <article class="card card--feature reveal">
           <div class="card__glow" aria-hidden="true"></div>
           <p class="card__kicker">Main research · InstaDeep</p>
@@ -221,16 +214,6 @@
           <p>Fine-tuning protein-folding models to predict binding affinity: modifying their architecture and shifting their confidence-score distributions toward enhanced mutants.</p>
           <div class="tags"><span>Binding affinity</span><span>Fine-tuning</span><span>PyTorch</span></div>
         </article>
-
-        <a class="card card--link reveal" href="#lab">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Side project · InstaDeep</p>
-          <h3>Claude as an autonomous researcher</h3>
-          <p>Pushing Claude to run an inverse-folding project on its own, from training models from scratch to proposing mutants, to see if an AI agent can work like a full-time employee.</p>
-          <div class="tags"><span>AI agents</span><span>Inverse folding</span></div>
-          <span class="card__arrow" aria-hidden="true">↓</span>
-        </a>
-
         <article class="card reveal">
           <div class="card__glow" aria-hidden="true"></div>
           <p class="card__kicker">Research · InstaDeep</p>
@@ -238,63 +221,20 @@
           <p>Probing how models represent near-identical sequences, to find the single point mutations that matter.</p>
           <div class="tags"><span>Interpretability</span></div>
         </article>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Python</p>
-          <h3>Graph search, visualised</h3>
-          <p>An interactive Streamlit app that animates classic graph search algorithms — BFS and DFS, with A* and Dijkstra on the way.</p>
-          <div class="tags"><span>Algorithms</span><span>Streamlit</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/repartition_enm" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Python</p>
-          <h3>Fair assignment of trainee judges</h3>
-          <p>A web app that optimally assigns trainee magistrates to courts, balancing their ranked wishes against real-world constraints — with validation, analytics and visual results.</p>
-          <div class="tags"><span>Optimisation</span><span>Streamlit</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/Apple_Scraping" target="_blank" rel="noopener">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Open source · Jupyter</p>
-          <h3>App Store Connect analytics scraper</h3>
-          <p>Recovering the app analytics data Apple’s API doesn’t expose, by automating App Store Connect with Selenium.</p>
-          <div class="tags"><span>Automation</span><span>Selenium</span></div>
-          <span class="card__arrow" aria-hidden="true">↗</span>
-        </a>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Computer vision · ROADIS</p>
-          <h3>Measuring safe distances on highways</h3>
-          <p>Algorithms that estimate inter-vehicle distances from traffic video to flag hazardous situations.</p>
-          <div class="tags"><span>Vision</span><span>Safety</span></div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card__glow" aria-hidden="true"></div>
-          <p class="card__kicker">Venture · 2025</p>
-          <h3>A voice companion for the elderly</h3>
-          <p>Co-founded an attempt at a conversational voice companion to keep senior citizens connected and less alone.</p>
-          <div class="tags"><span>Entrepreneurship</span><span>Voice AI</span></div>
-        </article>
       </div>
     </section>
 
     <!-- ───────────── LAB NOTEBOOK ───────────── -->
     <section class="section" id="lab">
       <div class="section__head reveal">
-        <span class="section__index">03</span>
-        <h2>Lab notebook</h2>
+        <span class="section__index">02</span>
+        <h2>Claude as a researcher</h2>
         <span class="section__rule"></span>
       </div>
 
       <div class="notebook">
         <div class="notebook__intro reveal">
-          <p class="notebook__kicker">Side project · InstaDeep · ongoing</p>
+          <p class="notebook__kicker">Lab notebook · side project at InstaDeep · ongoing</p>
           <h3 class="notebook__question">Can an AI agent do research like a full-time employee?</h3>
           <p>
             I gave Claude a protein inverse-folding model, a goal (beat ProteinMPNN, a strong
@@ -387,20 +327,21 @@
       </div>
     </section>
 
-    <!-- ───────────── PLAYGROUND ───────────── -->
-    <section class="section" id="playground">
+    <!-- ───────────── SIDE PROJECTS ───────────── -->
+    <section class="section" id="projects">
       <div class="section__head reveal">
-        <span class="section__index">04</span>
-        <h2>Playground</h2>
+        <span class="section__index">03</span>
+        <h2>Side projects</h2>
         <span class="section__rule"></span>
       </div>
 
-      <p class="section__intro reveal">
+      <p class="section__intro reveal">Things I build to learn and explore, from classic algorithms to small apps.</p>
+      <h3 class="subhead reveal" id="playground">Graph search, live</h3>
+      <p class="subhead__intro reveal">
         A browser version of my <a class="link" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">graph search project</a>,
         running on a network of neurons. Click a neuron to set the start, another for the goal, then
         pick an algorithm and watch the signal find its way.
       </p>
-
       <div class="pg reveal">
         <div class="pg__bar">
           <div class="seg" role="radiogroup" aria-label="Algorithm" id="pgAlgos">
@@ -408,10 +349,12 @@
             <button type="button" role="radio" aria-checked="false" data-algo="dfs">DFS</button>
             <button type="button" role="radio" aria-checked="false" data-algo="dijkstra">Dijkstra</button>
             <button type="button" role="radio" aria-checked="false" data-algo="astar">A*</button>
+            <button type="button" role="radio" aria-checked="false" data-algo="greedy">Greedy</button>
+            <button type="button" role="radio" aria-checked="false" data-algo="bidi">Bidirectional</button>
           </div>
           <div class="pg__actions">
             <button type="button" class="chip-btn chip-btn--accent" id="pgRun">Run ▸</button>
-            <button type="button" class="chip-btn" id="pgRace">Race all four</button>
+            <button type="button" class="chip-btn" id="pgRace">Race all six</button>
             <button type="button" class="chip-btn" id="pgNew">New network</button>
           </div>
         </div>
@@ -421,6 +364,7 @@
             <span><i class="lg lg--start"></i>start</span>
             <span><i class="lg lg--goal"></i>goal</span>
             <span><i class="lg lg--seen"></i>explored</span>
+            <span><i class="lg lg--seen2"></i>explored from goal</span>
             <span><i class="lg lg--path"></i>path</span>
           </div>
         </div>
@@ -429,13 +373,40 @@
           <div class="pg__stats" id="pgStats" aria-live="polite"></div>
         </div>
       </div>
+
+      <h3 class="subhead reveal">More projects</h3>
+      <div class="work-grid">
+        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/repartition_enm" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Python</p>
+          <h3>Fair assignment of trainee judges</h3>
+          <p>A web app that optimally assigns trainee magistrates to courts, balancing their ranked wishes against real-world constraints — with validation, analytics and visual results.</p>
+          <div class="tags"><span>Optimisation</span><span>Streamlit</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="card card--link reveal" href="https://github.com/VincentO-Luasa/Apple_Scraping" target="_blank" rel="noopener">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Open source · Jupyter</p>
+          <h3>App Store Connect analytics scraper</h3>
+          <p>Recovering the app analytics data Apple’s API doesn’t expose, by automating App Store Connect with Selenium.</p>
+          <div class="tags"><span>Automation</span><span>Selenium</span></div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </a>
+        <article class="card reveal">
+          <div class="card__glow" aria-hidden="true"></div>
+          <p class="card__kicker">Venture · 2025</p>
+          <h3>A voice companion for the elderly</h3>
+          <p>Co-founded an attempt at a conversational voice companion to keep senior citizens connected and less alone.</p>
+          <div class="tags"><span>Entrepreneurship</span><span>Voice AI</span></div>
+        </article>
+      </div>
     </section>
 
     <!-- ───────────── EXPERIENCE ───────────── -->
     <section class="section" id="experience">
       <div class="section__head reveal">
-        <span class="section__index">05</span>
-        <h2>Trajectory</h2>
+        <span class="section__index">04</span>
+        <h2>Career path</h2>
         <span class="section__rule"></span>
       </div>
 
@@ -504,7 +475,7 @@
     <!-- ───────────── EDUCATION & SKILLS ───────────── -->
     <section class="section" id="education">
       <div class="section__head reveal">
-        <span class="section__index">06</span>
+        <span class="section__index">05</span>
         <h2>Education &amp; toolkit</h2>
         <span class="section__rule"></span>
       </div>
@@ -553,7 +524,7 @@
     <!-- ───────────── OFF THE CLOCK ───────────── -->
     <section class="section" id="life">
       <div class="section__head reveal">
-        <span class="section__index">07</span>
+        <span class="section__index">06</span>
         <h2>Off the clock</h2>
         <span class="section__rule"></span>
       </div>
@@ -579,7 +550,7 @@
       <ul class="interests reveal">
         <li><strong>Calisthenics</strong>my longest-running habit</li>
         <li><strong>Neuroscience</strong>studied at CentraleSupélec and online</li>
-        <li><strong>Space</strong>a lifelong fascination (try pressing <kbd>S</kbd>)</li>
+        <li><button type="button" class="interest-btn" data-open-sky><strong>Space</strong>a lifelong fascination: open the sky ✦</button></li>
         <li><strong>Piano</strong>for the evenings</li>
         <li><strong>Running</strong>for the mornings</li>
         <li><strong>Teaching</strong>volunteer mathematics teacher</li>
@@ -609,10 +580,21 @@
 
   <footer class="footer">
     <p>© <span id="year"></span> Vincent O’Luasa</p>
-    <p class="footer__hint">Paris, France · psst, press <kbd>S</kbd></p>
+    <p class="footer__hint">Paris, France · <button type="button" class="link-btn" data-open-sky>psst, press <kbd>S</kbd> for the sky ✦</button></p>
   </footer>
 
+  <div class="sky" id="sky" hidden role="dialog" aria-modal="true" aria-label="The Solar System and constellations">
+    <canvas aria-hidden="true"></canvas>
+    <div class="sky__head">
+      <p class="sky__title">The Solar System</p>
+      <p class="sky__hint">Click a planet. Orbital speeds are to scale (Earth: one lap every 24 s); sizes and distances are not.</p>
+    </div>
+    <button type="button" class="chip-btn sky__close">Close <kbd>S</kbd></button>
+    <div class="sky__card" id="skyCard" hidden aria-live="polite"></div>
+  </div>
+
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/sky.js"></script>
   <script src="assets/js/explainer.js"></script>
   <script src="assets/js/playground.js"></script>
   <script src="assets/js/notebook.js"></script>
