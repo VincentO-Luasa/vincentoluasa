@@ -9,6 +9,12 @@
    to oblique while orbits trace themselves.
    Camera: drag rotates, wheel/pinch zooms to the cursor,
    clicking a planet flies to it and follows it.
+   Zooming out keeps going: Solar System → Milky Way →
+   Local Group → Laniakea supercluster → the cosmic web of
+   the observable universe.
+   From the Milky Way outwards, sizes and distances are to
+   scale with each other; only the jump from the Solar
+   System to the galaxy is compressed.
    ────────────────────────────────────────────── */
 (() => {
   const sky = document.getElementById("sky");
@@ -67,6 +73,7 @@
     card.hidden = true;
     dragYaw = 0; dragTilt = 0;
     Object.assign(target, { yaw: 0, tilt: 0.38, zoom: 1, panX: 0, panY: 0 });
+    journey = 0;
     if (instant) Object.assign(cam, target);
   }
 
@@ -113,6 +120,237 @@
   }
   const planetAngle = (p, i, t) => i * 1.7 + (t / (EARTH_LAP_S * p.years)) * Math.PI * 2;
 
+  /* ───────── Beyond the Solar System ───────── */
+  // World unit from here on: one Milky Way radius (~50,000 light-years).
+  const MIN_ZOOM = 8e-9, SOLAR_MIN = 0.4;
+  const UNIVERSE_R = 9.3e5;                       // observable-universe radius (46.5 Gly) in Milky Way radii
+  let cseed = 11;
+  const crand = () => ((cseed = (cseed * 16807) % 2147483647) / 2147483647);
+  const cgauss = () => (crand() + crand() + crand() + crand() - 2) / 1.15;
+
+  // A barred spiral: bulge + bar, logarithmic arms, diffuse disk (unit radius)
+  function spiralGalaxy(n, { arms = 2, bar = 0.18, pitch = 0.22, spread = 0.07, core = 0.25 } = {}) {
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const roll = crand();
+      if (roll < core) {
+        const a = crand() * Math.PI * 2, r = Math.abs(cgauss()) * 0.08;
+        pts.push({ x: cgauss() * bar + Math.cos(a) * r, y: cgauss() * bar * 0.3 + Math.sin(a) * r, c: 0 });
+      } else if (roll < 0.9) {
+        const arm = (crand() * arms) | 0;
+        const r = 0.12 + Math.pow(crand(), 0.85) * 0.9;
+        const th = Math.log(r / 0.12) / pitch + arm * ((2 * Math.PI) / arms);
+        const sp = spread * (0.5 + r);
+        pts.push({ x: Math.cos(th) * r + cgauss() * sp, y: Math.sin(th) * r + cgauss() * sp, c: crand() < 0.06 ? 2 : 1 });
+      } else {
+        const a = crand() * Math.PI * 2, r = Math.sqrt(crand());
+        pts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r, c: 1 });
+      }
+    }
+    return pts;
+  }
+  const place = (pts, { scale, squash = 1, rot = 0, at }) => pts.map((p) => {
+    const x = p.x * scale, y = p.y * scale * squash;
+    return { x: at[0] + x * Math.cos(rot) - y * Math.sin(rot), y: at[1] + x * Math.sin(rot) + y * Math.cos(rot), c: p.c };
+  });
+  const blob = (n, r, at) => Array.from({ length: n }, () => ({ x: at[0] + cgauss() * r, y: at[1] + cgauss() * r * 0.7, c: 1 }));
+
+  const MILKY_WAY = spiralGalaxy(7000, { arms: 4, bar: 0.2 });
+  const SUN = { x: 0.52 * Math.cos(-1.9), y: 0.52 * Math.sin(-1.9) };   // ~26,000 ly from the centre
+  const polar = (r, a) => [r * Math.cos(a), r * Math.sin(a)];
+  const ANDROMEDA = polar(50, 0.6);              // 2.5 million ly
+  const TRIANGULUM = polar(58, 0.86);            // ~2.9 million ly, ~16 radii from Andromeda
+  const LMC = polar(3.2, 3.5), SMC = polar(4, 3.8);
+  const LOCAL_GROUP = [
+    ...place(spiralGalaxy(2600, { arms: 2, bar: 0.06, pitch: 0.17, spread: 0.09, core: 0.32 }), { scale: 2.2, squash: 0.3, rot: 0.66, at: ANDROMEDA }),
+    ...place(spiralGalaxy(700, { arms: 2, bar: 0.02, core: 0.15, spread: 0.12 }), { scale: 0.6, squash: 0.6, rot: 1.2, at: TRIANGULUM }),
+    ...blob(260, 0.12, LMC), ...blob(150, 0.07, SMC),
+    // dwarf galaxies around the two big spirals
+    ...Array.from({ length: 18 }, (_, i) => {
+      const host = i % 2 ? ANDROMEDA : [0, 0];
+      const [dx, dy] = polar(2 + crand() * 6, crand() * 6.28);
+      return blob(14, 0.08, [host[0] + dx, host[1] + dy]);
+    }).flat(),
+  ];
+  const LG_LABELS = [["Milky Way", [0, 0], 1.2], ["Andromeda", ANDROMEDA, 2.6], ["Triangulum", TRIANGULUM, 0.9]];
+  const LG_CENTER = { x: ANDROMEDA[0] * 0.45, y: ANDROMEDA[1] * 0.45 };
+
+  // Cosmic web: galaxy clusters joined by filaments, in a unit disk
+  const makeWeb = (nodeCount, count, extra = []) => {
+    const nodes = [...extra, ...Array.from({ length: nodeCount }, () => polar(Math.sqrt(crand()) * 0.98, crand() * 6.28))];
+    const links = [];
+    nodes.forEach((a, i) => {
+      nodes.map((b, j) => [Math.hypot(a[0] - b[0], a[1] - b[1]), j]).filter(([, j]) => j !== i)
+        .sort((p, q) => p[0] - q[0]).slice(0, 3).forEach(([, j]) => links.push([i, j]));
+    });
+    const pts = [];
+    for (let i = 0; i < count; i++) {
+      const r = crand();
+      if (r < 0.25) {                                // clusters at the nodes
+        const n = nodes[(crand() * nodes.length) | 0];
+        pts.push({ x: n[0] + cgauss() * 0.022, y: n[1] + cgauss() * 0.022, b: 1 });
+      } else if (r < 0.8) {                          // filaments, slightly bowed and fuzzy
+        const [a, b] = links[(crand() * links.length) | 0], t = crand();
+        const A = nodes[a], B = nodes[b];
+        const bow = Math.sin(t * Math.PI) * 0.04 * (((a * 7 + b) % 3) - 1);
+        const nx = -(B[1] - A[1]), ny = B[0] - A[0], nl = Math.hypot(nx, ny) || 1;
+        pts.push({ x: A[0] + (B[0] - A[0]) * t + (nx / nl) * bow + cgauss() * 0.012, y: A[1] + (B[1] - A[1]) * t + (ny / nl) * bow + cgauss() * 0.012, b: 0.8 });
+      } else {                                       // sparse galaxies in the voids
+        const [x, y] = polar(Math.sqrt(crand()), crand() * 6.28);
+        pts.push({ x, y, b: 0.35 });
+      }
+    }
+    return pts.filter((p) => Math.hypot(p.x, p.y) < 1);
+  };
+  const WEB = makeWeb(150, 14000, [[0, 0]]);              // observable universe, centred on us
+  // Laniakea, our supercluster (~520 million ly across): the Local Group sits out on its edge,
+  // the Great Attractor at its heart
+  const LANIAKEA_R = 5200;                                // in Milky Way radii
+  const LAN_CENTER = { x: -0.62 * LANIAKEA_R, y: 0.25 * LANIAKEA_R };
+  const LANIAKEA = makeWeb(60, 7000, [[0, 0], [0.62, -0.25]]);
+
+  const SCALES = [
+    { at: -1, name: "Solar System", size: "about 100 AU across · 8 planets" },
+    { at: -3, name: "Milky Way", size: "about 100,000 light-years across · 100–400 billion stars" },
+    { at: -4.8, name: "Local Group", size: "about 10 million light-years across · 80+ galaxies" },
+    { at: -6.8, name: "Laniakea Supercluster", size: "about 520 million light-years across · ~100,000 galaxies" },
+    { at: -Infinity, name: "Observable universe", size: "about 93 billion light-years across · hundreds of billions of galaxies" },
+  ];
+  const smooth = (L, a, b) => { const x = clamp((a - L) / (a - b), 0, 1); return x * x * (3 - 2 * x); };
+
+  function drawCosmos(L, alphaAll) {
+    const G0 = Math.min(W, H) * 0.42;
+    const k = (G0 * cam.zoom) / 0.01;               // pixels per Milky Way radius
+    // Where the camera is centred: the Sun, then the galactic centre, the Local Group, and us again
+    let fx = lerp(SUN.x, 0, smooth(L, -1.3, -2.3)), fy = lerp(SUN.y, 0, smooth(L, -1.3, -2.3));
+    const s2 = smooth(L, -3.0, -4.0); fx = lerp(fx, LG_CENTER.x, s2); fy = lerp(fy, LG_CENTER.y, s2);
+    const s3 = smooth(L, -4.4, -5.4); fx = lerp(fx, LAN_CENTER.x, s3); fy = lerp(fy, LAN_CENTER.y, s3);
+    const s4 = smooth(L, -6.3, -7.3); fx = lerp(fx, 0, s4); fy = lerp(fy, 0, s4);
+    const tilt = lerp(cam.tilt, 1, smooth(L, -3.5, -5));
+    const ca = Math.cos(cam.yaw), sa = Math.sin(cam.yaw);
+    const fxr = fx * ca - fy * sa, fyr = fx * sa + fy * ca;
+    const cx = W / 2, cy = H / 2 + 20;
+    const sx = (x, y) => cx + (x * ca - y * sa - fxr) * k;
+    const sy = (x, y) => cy + (x * sa + y * ca - fyr) * k * tilt;
+    const onScreen = (x, y, m = 40) => x > -m && x < W + m && y > -m && y < H + m;
+
+    const mwA = smooth(L, -0.7, -1.5) * alphaAll;
+    const lgA = smooth(L, -2.6, -3.3) * (1 - smooth(L, -4.4, -5.2)) * alphaAll;
+    const lanA = smooth(L, -4.3, -5.1) * (1 - smooth(L, -6.4, -7.2)) * alphaAll;
+    const webA = smooth(L, -6.3, -7.3) * alphaAll;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+
+    if (webA > 0.01) {
+      const U = UNIVERSE_R;
+      for (const p of WEB) {
+        const x = sx(p.x * U, p.y * U), y = sy(p.x * U, p.y * U);
+        if (!onScreen(x, y, 2)) continue;
+        ctx.fillStyle = `rgba(170,165,255,${0.32 * p.b * webA})`;
+        ctx.fillRect(x, y, 1.2, 1.2);
+      }
+      // The edge of the observable universe, with the cosmic microwave background glowing beyond
+      const R = U * k;
+      if (R < Math.max(W, H) * 3) {
+        const c0x = sx(0, 0), c0y = sy(0, 0);
+        const g = ctx.createRadialGradient(c0x, c0y, R * 0.96, c0x, c0y, R * 1.06);
+        g.addColorStop(0, "rgba(255,140,80,0)"); g.addColorStop(0.5, `rgba(255,140,80,${0.16 * webA})`); g.addColorStop(1, "rgba(255,140,80,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(c0x, c0y, R * 1.06, 0, Math.PI * 2); ctx.fill();
+        ctx.globalCompositeOperation = "source-over";
+        ctx.font = "11px 'JetBrains Mono', monospace";
+        ctx.fillStyle = `rgba(255,190,150,${0.75 * webA})`;
+        ctx.textAlign = "center";
+        ctx.fillText("EDGE OF THE OBSERVABLE UNIVERSE · COSMIC MICROWAVE BACKGROUND", c0x, c0y - R - 14);
+        ctx.textAlign = "start";
+        ctx.globalCompositeOperation = "lighter";
+      }
+    }
+
+    if (lanA > 0.01) {
+      for (const p of LANIAKEA) {
+        const wx = LAN_CENTER.x + p.x * LANIAKEA_R, wy = LAN_CENTER.y + p.y * LANIAKEA_R;
+        const x = sx(wx, wy), y = sy(wx, wy);
+        if (!onScreen(x, y, 2)) continue;
+        ctx.fillStyle = `rgba(205,190,255,${0.4 * p.b * lanA})`;
+        ctx.fillRect(x, y, 1.2, 1.2);
+      }
+    }
+
+    if (lgA > 0.01) {
+      const col = [[255, 220, 170], [185, 205, 255], [255, 150, 190]];
+      for (const p of LOCAL_GROUP) {
+        const x = sx(p.x, p.y), y = sy(p.x, p.y);
+        if (!onScreen(x, y, 2)) continue;
+        const c = col[p.c];
+        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${0.55 * lgA * clamp(Math.pow(k / 45, 1.5), 0.012, 1)})`;
+        ctx.fillRect(x, y, 1.1, 1.1);
+      }
+    }
+
+    if (mwA > 0.01) {
+      const R = k;                                   // Milky Way radius on screen
+      const gx = sx(0, 0), gy = sy(0, 0);
+      const core = ctx.createRadialGradient(gx, gy, 0, gx, gy, Math.max(3, R * 0.35));
+      core.addColorStop(0, `rgba(255,225,180,${0.35 * mwA})`); core.addColorStop(1, "rgba(255,200,140,0)");
+      ctx.fillStyle = core;
+      ctx.beginPath(); ctx.ellipse(gx, gy, Math.max(3, R * 0.35), Math.max(3, R * 0.35) * tilt, 0, 0, Math.PI * 2); ctx.fill();
+      if (R > 4) {
+        const col = [[255, 220, 170], [190, 210, 255], [255, 150, 190]];
+        const size = clamp(R / 260, 0.8, 2.2);
+        for (const p of MILKY_WAY) {
+          const x = sx(p.x, p.y), y = sy(p.x, p.y);
+          if (!onScreen(x, y, 2)) continue;
+          const c = col[p.c];
+          ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${0.5 * mwA * clamp(Math.pow(R / 140, 1.5), 0.012, 1)})`;
+          ctx.fillRect(x, y, size, size);
+        }
+      }
+    }
+    ctx.restore();
+
+    // Labels: galaxies of the Local Group, and "You are here"
+    ctx.font = "11px 'JetBrains Mono', monospace";
+    ctx.textAlign = "center";
+    if (lanA > 0.3) {
+      ctx.fillStyle = `rgba(220,205,255,${0.7 * lanA})`;
+      ctx.fillText("Great Attractor", sx(LAN_CENTER.x, LAN_CENTER.y), sy(LAN_CENTER.x, LAN_CENTER.y) + 18);
+    }
+    if (lgA > 0.2 && k < 60 && k > 0.8) {
+      for (const [name, [x, y], r] of LG_LABELS) {
+        const X = sx(x, y), Y = sy(x, y) + r * k * tilt + 16;
+        if (onScreen(X, Y)) { ctx.fillStyle = `rgba(200,210,240,${0.75 * lgA})`; ctx.fillText(name, X, Y); }
+      }
+      if (k > 12) for (const [name, [x, y]] of [["Large Magellanic Cloud", LMC], ["Small Magellanic Cloud", SMC]]) {
+        ctx.fillStyle = `rgba(200,210,240,${0.5 * lgA})`; ctx.fillText(name, sx(x, y), sy(x, y) + 16);
+      }
+    }
+    const youA = smooth(L, -1.0, -1.6) * alphaAll;
+    if (youA > 0.01) {
+      const m = smooth(L, -2.8, -3.6);
+      const yx = sx(lerp(SUN.x, 0, m), lerp(SUN.y, 0, m)), yy = sy(lerp(SUN.x, 0, m), lerp(SUN.y, 0, m));
+      ctx.strokeStyle = `rgba(140,200,217,${0.9 * youA})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(yx, yy, 9, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = `rgba(232,234,246,${0.9 * youA})`;
+      ctx.fillText("You are here", yx, yy - 16);
+    }
+    ctx.textAlign = "start";
+  }
+
+  let scaleShown = "", journey = 0;            // journey: -1 flying out to the universe, +1 flying home
+  const scaleEl = document.getElementById("skyScale");
+  const journeyBtn = sky.querySelector(".sky__journey");
+  function updateHud(L) {
+    const sc = SCALES.find((x) => L > x.at);
+    if (sc.name !== scaleShown) {
+      scaleShown = sc.name;
+      scaleEl.innerHTML = `<strong>${sc.name}</strong><span>${sc.size}</span>`;
+    }
+    const label = L < -4 ? "Back to the Sun ↙" : "Zoom out to the universe ↗";
+    if (journeyBtn.textContent !== label) journeyBtn.textContent = label;
+  }
+
   function frame(now) {
     if (!open && now - closedAt > CLOSE_MS) return;
     const dt = Math.min(0.05, (now - (last || now)) / 1000);
@@ -127,7 +365,15 @@
     const wantTilt = clamp(target.tilt + dragTilt, 0.12, 0.95);
     cam.yaw = lerp(cam.yaw, wantYaw, k);
     cam.tilt = lerp(cam.tilt, wantTilt, k);
-    cam.zoom = lerp(cam.zoom, target.zoom, k);
+    if (journey) {
+      const Lt = Math.log10(target.zoom) + journey * dt * 0.9;   // about one power of ten per second
+      target.zoom = clamp(10 ** Lt, MIN_ZOOM, 1);
+      if ((journey < 0 && target.zoom <= MIN_ZOOM) || (journey > 0 && target.zoom >= 1)) journey = 0;
+    }
+    if (target.zoom < SOLAR_MIN) { target.panX = 0; target.panY = 0; if (selected) { selected = null; card.hidden = true; } }
+    cam.zoom = Math.exp(lerp(Math.log(cam.zoom), Math.log(target.zoom), k));   // ease in log space across scales
+    const L = Math.log10(cam.zoom);
+    const solarA = 1 - smooth(L, -0.5, -1.4), constA = 1 - smooth(L, -0.3, -0.8);
     if (selected) {
       const i = PLANETS.indexOf(selected);
       const pos = project(orbitR(selected.au), planetAngle(selected, i, t), 1);
@@ -142,12 +388,13 @@
     ctx.fillStyle = "#03040b";
     ctx.fillRect(0, 0, W, H);
 
+    const starFade = smooth(L, -4.4, -5.8);
     // Background stars: hyperspace streaks during the entrance, then parallax points
     const cx0 = W / 2, cy0 = H / 2;
     const warp = reduceMotion ? 0 : 1 - easeOut(introT * 1.6);
     for (const s of stars) {
       const sx = s.x, sy = s.y;
-      const alpha = s.a * (0.8 + Math.sin(t * 1.3 + s.tw) * 0.2);
+      const alpha = s.a * (0.8 + Math.sin(t * 1.3 + s.tw) * 0.2) * (1 - 0.85 * starFade);
       if (warp > 0.02) {
         const len = warp * 0.55 * s.depth;
         ctx.strokeStyle = `rgba(200,225,255,${alpha * (0.6 + warp * 0.4)})`;
@@ -162,10 +409,13 @@
       }
     }
 
-    // Constellations: lines trace in after the arrival, with a little more parallax
+    drawCosmos(L, 1);
+    updateHud(L);
+
+    // Constellations: lines trace in after the arrival (only meaningful as seen from Earth)
     ctx.font = "10.5px 'JetBrains Mono', monospace";
     placed.forEach((c, ci) => {
-      const prog = clamp((introT - 0.45 - ci * 0.025) / 0.5, 0, 1);
+      const prog = clamp((introT - 0.45 - ci * 0.025) / 0.5, 0, 1) * constA;
       if (prog <= 0) return;
       const P = c.pts;
       ctx.strokeStyle = `rgba(140,200,217,${0.35 * prog})`;
@@ -197,7 +447,7 @@
       const prog = clamp(introT * 1.8 - i * 0.07, 0, 1);
       if (prog <= 0) return;
       const r = orbitR(p.au) * cam.zoom * introScale;
-      ctx.strokeStyle = selected === p ? "rgba(140,200,217,0.55)" : "rgba(255,255,255,0.09)";
+      ctx.strokeStyle = selected === p ? `rgba(140,200,217,${0.55 * solarA})` : `rgba(255,255,255,${0.09 * solarA})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.ellipse(W / 2 + cam.panX, H / 2 + 20 + cam.panY, r, r * cam.tilt, 0, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * prog);
@@ -209,7 +459,7 @@
     for (const b of belt) {
       const ang = b.a0 + (t / (EARTH_LAP_S * Math.pow(b.au, 1.5))) * Math.PI * 2;
       const q = project(orbitR(b.au), ang, introScale);
-      ctx.fillStyle = `rgba(200,190,170,${0.35 * b.s * beltAlpha})`;
+      ctx.fillStyle = `rgba(200,190,170,${0.35 * b.s * beltAlpha * solarA})`;
       ctx.fillRect(q.x, q.y, 1.1, 1.1);
     }
 
@@ -228,15 +478,15 @@
       g.addColorStop(0.18, "rgba(255,206,120,0.95)");
       g.addColorStop(0.4, "rgba(255,170,80,0.25)");
       g.addColorStop(1, "rgba(255,150,60,0)");
-      ctx.globalAlpha = clamp(introT * 3, 0, 1);
+      ctx.globalAlpha = clamp(introT * 3, 0, 1) * Math.max(solarA, 0.0);
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(s.x, s.y, sr * 4, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
     };
     const drawBody = (b) => {
-      if (b.alpha <= 0) return;
+      if (b.alpha <= 0 || solarA <= 0.01) return;
       const { p, x, y, size } = b;
-      ctx.globalAlpha = b.alpha;
+      ctx.globalAlpha = b.alpha * solarA;
       if (p.rings) {
         ctx.strokeStyle = "rgba(227,210,154,0.55)";
         ctx.lineWidth = Math.max(1, size * 0.28);
@@ -276,7 +526,7 @@
       ctx.fillText(p.name, x, y + size + 14);
       ctx.textAlign = "start";
       ctx.globalAlpha = 1;
-      hits.push({ p, x, y, r: Math.max(16, size + 8) });
+      if (solarA > 0.6) hits.push({ p, x, y, r: Math.max(16, size + 8) });
     };
     bodies.filter((b) => b.depth < 0).sort((a, b) => a.y - b.y).forEach(drawBody);
     sun();
@@ -302,20 +552,23 @@
 
   function zoomAt(factor, x, y) {
     const z0 = target.zoom;
-    const z1 = clamp(z0 * factor, 0.5, 8);
-    if (!selected) {
+    const z1 = clamp(z0 * factor, MIN_ZOOM, 8);
+    journey = 0;
+    if (!selected && z1 >= SOLAR_MIN) {
       // Keep the point under the cursor fixed while zooming
       const ox = x - W / 2 - target.panX, oy = y - H / 2 - 20 - target.panY;
       target.panX -= ox * (z1 / z0 - 1);
       target.panY -= oy * (z1 / z0 - 1);
       if (z1 <= 1) { target.panX *= z1; target.panY *= z1; }
     }
+    if (z1 < SOLAR_MIN) { target.panX = 0; target.panY = 0; }
     target.zoom = z1;
   }
 
   canvas.addEventListener("wheel", (e) => {
     e.preventDefault();
-    zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX, e.clientY);
+    // Zoom faster once past the Solar System: there are eight powers of ten to cross
+    zoomAt(Math.exp(-e.deltaY * (target.zoom < SOLAR_MIN ? 0.004 : 0.0015)), e.clientX, e.clientY);
   }, { passive: false });
 
   canvas.addEventListener("pointerdown", (e) => {
@@ -388,6 +641,10 @@
 
   sky.querySelector(".sky__close").addEventListener("click", () => setOpen(false));
   sky.querySelector(".sky__reset").addEventListener("click", () => resetCamera(false));
+  journeyBtn.addEventListener("click", () => {
+    selected = null; card.hidden = true;
+    journey = Math.log10(cam.zoom) < -4 ? 1 : -1;
+  });
   document.querySelectorAll("[data-open-sky]").forEach((b) => b.addEventListener("click", () => setOpen(true)));
   window.addEventListener("resize", () => { if (open) resize(); });
   document.addEventListener("keydown", (e) => {

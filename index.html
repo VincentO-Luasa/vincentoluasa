@@ -635,14 +635,16 @@
   <div class="sky" id="sky" hidden role="dialog" aria-modal="true" aria-label="The Solar System and constellations">
     <canvas aria-hidden="true"></canvas>
     <div class="sky__head">
-      <p class="sky__title">The Solar System</p>
-      <p class="sky__hint">Click and drag to rotate, scroll to zoom, click a planet to fly to it. Orbital speeds are to scale (Earth: one lap every 24 s); sizes and distances are not.</p>
+      <p class="sky__title">The cosmos</p>
+      <p class="sky__hint">Click and drag to rotate, scroll to zoom, click a planet to fly to it. Keep zooming out to leave the Solar System. Orbital speeds are to scale (Earth: one lap every 24 s); planet sizes and distances are not. From the Milky Way outwards, everything is to scale.</p>
     </div>
     <div class="sky__actions">
+      <button type="button" class="chip-btn chip-btn--accent sky__journey">Zoom out to the universe ↗</button>
       <button type="button" class="chip-btn sky__reset">Reset view</button>
       <button type="button" class="chip-btn sky__close">Close <kbd>S</kbd></button>
     </div>
     <div class="sky__card" id="skyCard" hidden aria-live="polite"></div>
+    <div class="sky__scale" id="skyScale" aria-live="polite"></div>
   </div>
 
   <div class="sky brain" id="brainMode" hidden role="dialog" aria-modal="true" aria-label="A digital human brain">

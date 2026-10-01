@@ -1078,12 +1078,25 @@ body.sky-open main, body.sky-open .footer { filter: blur(6px) brightness(.6); tr
 .sky__hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
 .sky__actions { position: absolute; top: 20px; right: var(--gutter); display: flex; gap: 8px; }
 .sky__actions .chip-btn { background: rgba(5, 6, 15, 0.7); }
+.sky__actions .chip-btn--accent { background: var(--text); color: var(--bg); border-color: var(--text); }
+.sky__actions .chip-btn--accent:hover { background: #fff; color: var(--bg); }
 .sky__card {
   position: absolute; left: var(--gutter); bottom: 24px; max-width: 320px;
   background: rgba(5, 6, 15, 0.88); border: 1px solid var(--border-strong); border-radius: 14px;
   padding: 14px 16px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .sky__card[hidden] { display: none; }
+.sky__scale {
+  position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center;
+  padding: 8px 16px; border-radius: 14px; pointer-events: none;
+  background: rgba(5, 6, 15, 0.7); border: 1px solid var(--border);
+  opacity: 0; transition: opacity .4s ease;
+}
+.sky.is-open .sky__scale { opacity: 1; transition: opacity .8s ease 1.4s; }
+.sky__scale strong { font-family: var(--font-display); font-weight: 400; font-size: 18px; }
+.sky__scale span { font: 11px var(--font-mono); color: var(--muted); }
+.sky__card:not([hidden]) ~ .sky__scale { display: none; }
 .sky__card h3 { font-family: var(--font-display); font-size: 22px; margin-bottom: 6px; }
 .sky__card ul { font: 12px var(--font-mono); color: var(--muted); margin-bottom: 8px; }
 .sky__card p { font-size: 14px; color: var(--text); }
@@ -1148,6 +1161,9 @@ body.sky-open main, body.sky-open .footer { filter: blur(6px) brightness(.6); tr
   .intro { padding-top: 120px; }
   .life-grid { grid-template-columns: 1fr; max-width: 420px; }
   .sky__head { right: var(--gutter); top: 64px; }
+  .sky__actions { flex-wrap: wrap; justify-content: flex-end; left: var(--gutter); }
+  .sky__head { top: 112px; }
+  .sky__scale { width: calc(100% - 2 * var(--gutter)); }
   .sky__title { font-size: 20px; }
   .sky__hint { font-size: 12px; }
   .research-grid { grid-template-columns: 1fr; }
