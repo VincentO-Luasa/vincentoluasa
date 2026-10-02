@@ -341,16 +341,19 @@
     kick();
   }
 
+  let modeNote = "";
   function report(r) {
-    statsEl.innerHTML = r.path.length
+    const note = modeNote ? `<span class="pg__note">${modeNote}</span><br>` : "";
+    modeNote = "";
+    statsEl.innerHTML = note + (r.path.length
       ? `explored <b>${r.order.length}</b> / ${nodes.length} neurons<br>path <b>${r.hops}</b> hops${weighted ? ` · total cost <b>${r.cost}</b>` : ""}`
-      : `explored <b>${r.order.length}</b> neurons · no path`;
+      : `explored <b>${r.order.length}</b> neurons · no path`);
   }
 
   function run() {
     anim = { result: search(algo), t0: performance.now(), reported: false };
     descEl.innerHTML = describe(algo);
-    statsEl.innerHTML = `<span>searching…</span>`;
+    statsEl.innerHTML = modeNote ? `<span class="pg__note">${modeNote}</span><br><span>searching…</span>` : `<span>searching…</span>`;
     kick();
   }
 
@@ -391,9 +394,11 @@
   modeBtns.forEach((btn) => btn.addEventListener("click", () => {
     weighted = btn.dataset.mode === "weighted";
     modeBtns.forEach((x) => x.setAttribute("aria-checked", String(x === btn)));
-    canvas.classList.toggle("is-unweighted", !weighted);
-    anim = null;
-    showIdle();
+    // Make the change visible right away: re-run the selected algorithm under the new costs
+    modeNote = weighted
+      ? "Now <b>weighted</b>: each connection costs its length"
+      : "Now <b>unweighted</b>: every connection costs 1";
+    run();
   }));
 
   canvas.addEventListener("click", (e) => {

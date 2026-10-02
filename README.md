@@ -35,3 +35,8 @@ Placeholders awaiting real content are marked with `class="ph"` in `index.html`
 
 Live at **https://vincento-luasa.github.io/vincentoluasa/** (GitHub Pages, `main` / root).
 Every push to `main` redeploys automatically within a minute or two.
+
+## Updating
+
+Run `./tools/bump-assets.sh` before committing CSS/JS changes: it stamps each asset link in
+`index.html` with a hash of the file (`?v=...`) so visitors never get a stale cached script.
