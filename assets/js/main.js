@@ -308,6 +308,30 @@
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
+  /* ───────── Career: per-role "more" toggle (small screens) ───────── */
+  document.querySelectorAll(".timeline__item").forEach((item) => {
+    const extra = item.querySelectorAll(".timeline__body li").length - 2;
+    if (extra <= 0) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "chip-btn more-btn";
+    btn.textContent = `+ ${extra} more`;
+    btn.addEventListener("click", () => {
+      const open = item.classList.toggle("is-open");
+      btn.textContent = open ? "Show less" : `+ ${extra} more`;
+    });
+    item.querySelector(".timeline__body ul").after(btn);
+  });
+
+  /* ───────── Lab notebook: expand the protocol history (small screens) ───────── */
+  const labMore = document.getElementById("labMore");
+  if (labMore) labMore.addEventListener("click", () => {
+    const log = document.getElementById("labLog");
+    const open = log.classList.toggle("is-expanded");
+    labMore.setAttribute("aria-expanded", String(open));
+    labMore.textContent = open ? "Show less" : "Show the full protocol history";
+  });
+
   /* ───────── Easter eggs ───────── */
   const toastEl = document.createElement("div");
   toastEl.className = "toast";

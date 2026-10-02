@@ -33,6 +33,7 @@
         <li><a href="#lab">Claude lab</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#experience">Career</a></li>
+        <li><a href="#life">Life</a></li>
         <li><a href="#contact" class="nav__cta">Contact</a></li>
       </ul>
     </nav>
@@ -92,11 +93,10 @@
     </section>
 
     <!-- ───────────── RESEARCH ───────────── -->
-    <section class="section" id="research">
+    <section class="section section--band" id="research">
+      <p class="section__kicker"><span class="section__index">01</span><span class="section__label">Research</span></p>
       <div class="section__head reveal">
-        <span class="section__index">01</span>
         <h2>AI for cancer therapy</h2>
-        <span class="section__rule"></span>
       </div>
 
       <p class="section__intro reveal">My day job in InstaDeep’s BioAI team: deep learning that predicts how proteins bind, to help design immune receptors that recognise cancer.</p>
@@ -226,10 +226,9 @@
 
     <!-- ───────────── LAB NOTEBOOK ───────────── -->
     <section class="section" id="lab">
+      <p class="section__kicker"><span class="section__index">02</span><span class="section__label">Claude lab</span></p>
       <div class="section__head reveal">
-        <span class="section__index">02</span>
         <h2>Claude as a researcher</h2>
-        <span class="section__rule"></span>
       </div>
 
       <div class="notebook">
@@ -266,7 +265,7 @@
             </details>
           </figure>
 
-          <ol class="notebook__log">
+          <ol class="notebook__log" id="labLog">
             <li class="entry reveal">
               <span class="entry__tag">Protocol v1 · Bootstrap</span>
               <h4>“Loop forever. Never stop.”</h4>
@@ -309,6 +308,7 @@
               <h4>Choosing the right yardstick</h4>
               <p>Mid-loop, we found that the quick evaluation underestimated the full one, and that chasing test scores made decisions slow and noisy. The validation score became the decision metric, with the test set kept for reference only.</p>
             </li>
+            <li class="entry entry--toggle"><button type="button" class="chip-btn" id="labMore" aria-expanded="false" aria-controls="labLog">Show the full protocol history</button></li>
             <li class="entry entry--verdict reveal">
               <span class="entry__tag">So far · What I learned</span>
               <h4>Baseline beaten, on its own</h4>
@@ -328,11 +328,10 @@
     </section>
 
     <!-- ───────────── SIDE PROJECTS ───────────── -->
-    <section class="section" id="projects">
+    <section class="section section--band" id="projects">
+      <p class="section__kicker"><span class="section__index">03</span><span class="section__label">Projects</span></p>
       <div class="section__head reveal">
-        <span class="section__index">03</span>
         <h2>Side projects</h2>
-        <span class="section__rule"></span>
       </div>
 
       <p class="section__intro reveal">Things I build to learn and explore, from classic algorithms to small apps.</p>
@@ -404,10 +403,9 @@
 
     <!-- ───────────── EXPERIENCE ───────────── -->
     <section class="section" id="experience">
+      <p class="section__kicker"><span class="section__index">04</span><span class="section__label">Career</span></p>
       <div class="section__head reveal">
-        <span class="section__index">04</span>
         <h2>Career path</h2>
-        <span class="section__rule"></span>
       </div>
 
       <ol class="timeline">
@@ -473,11 +471,10 @@
     </section>
 
     <!-- ───────────── EDUCATION & SKILLS ───────────── -->
-    <section class="section" id="education">
+    <section class="section section--band" id="education">
+      <p class="section__kicker"><span class="section__index">05</span><span class="section__label">Education</span></p>
       <div class="section__head reveal">
-        <span class="section__index">05</span>
         <h2>Education &amp; toolkit</h2>
-        <span class="section__rule"></span>
       </div>
 
       <div class="edu">
@@ -521,15 +518,33 @@
       </div>
     </section>
 
-    <!-- ───────────── THE BRAIN & THE COSMOS ───────────── -->
-    <section class="section" id="frontiers">
+    <!-- ───────────── OFF THE CLOCK ───────────── -->
+    <section class="section" id="life">
+      <p class="section__kicker"><span class="section__index">06</span><span class="section__label">Life</span></p>
       <div class="section__head reveal">
-        <span class="section__index">06</span>
-        <h2>The brain &amp; the cosmos</h2>
-        <span class="section__rule"></span>
+        <h2>Off the clock</h2>
       </div>
-      <p class="section__intro reveal">Two frontiers I never get tired of: the eighty-six billion neurons inside our heads, and the hundreds of billions of stars above them. I studied neuroscience at CentraleSupélec and online, and I’ve been looking up for as long as I can remember.</p>
 
+      <p class="section__intro reveal">The things that keep me curious, and keep me sane, away from the GPU queue.</p>
+      <div class="life-grid">
+        <figure class="life-tile reveal">
+          <img src="assets/img/vincent-mont-aiguille.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Vincent hiking on a rocky ridge in the Vercors, Mont Aiguille behind him." />
+          <figcaption><strong>Hiking</strong> The Vercors, on the way to Mont Aiguille.</figcaption>
+        </figure>
+        <figure class="life-tile reveal">
+          <div class="life-tile__img">
+            <img src="assets/img/climbing.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Climbers on a tall limestone cliff under a deep blue sky; Vincent, in black, is near the top." />
+            <span class="life-tile__me" style="left: 48%; top: 27%;" aria-hidden="true"><span>me</span></span>
+          </div>
+          <figcaption><strong>Climbing</strong> New since this summer. That’s me in black, trying not to fall.</figcaption>
+        </figure>
+        <figure class="life-tile reveal">
+          <img src="assets/img/wok-sesame-beef.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Sesame beef stir-fry with snow peas, carrots and onion in a wok." />
+          <figcaption><strong>Cooking</strong> Sesame beef stir-fry, straight from the wok. CAP cuisine certified.</figcaption>
+        </figure>
+      </div>
+      <h3 class="subhead reveal" id="obsessions">Two obsessions: the brain &amp; the cosmos</h3>
+      <p class="subhead__intro reveal">The eighty-six billion neurons inside our heads, and the hundreds of billions of stars above them. I studied neuroscience at CentraleSupélec and online, and I’ve been looking up for as long as I can remember. Both are below, to play with.</p>
       <div class="frontiers">
         <article class="frontier frontier--brain reveal" id="brain">
           <p class="frontier__kicker">The brain · live simulation</p>
@@ -560,7 +575,7 @@
         <article class="frontier frontier--cosmos reveal">
           <p class="frontier__kicker">The cosmos · interactive</p>
           <h3>Open the sky</h3>
-          <p class="frontier__text">A solar system with orbital speeds to scale (Earth takes 24 seconds per lap), 13 constellations, and a fact for every planet. Drag to rotate, scroll to zoom, click a planet to fly to it.</p>
+          <p class="frontier__text">A solar system with orbital speeds to scale (Earth takes 24 seconds per lap), 25 constellations, a fact for every planet, and a zoom out all the way to the edge of the observable universe. Drag to rotate, scroll to zoom, click a planet to fly to it.</p>
           <canvas id="miniOrrery" class="mini-orrery" aria-hidden="true"></canvas>
           <div class="frontier__foot">
             <button type="button" class="btn btn--primary" data-open-sky>Open the sky ✦</button>
@@ -568,37 +583,10 @@
           </div>
         </article>
       </div>
-    </section>
 
-    <!-- ───────────── OFF THE CLOCK ───────────── -->
-    <section class="section" id="life">
-      <div class="section__head reveal">
-        <span class="section__index">07</span>
-        <h2>Off the clock</h2>
-        <span class="section__rule"></span>
-      </div>
-
-      <p class="section__intro reveal">The things that keep me curious, and keep me sane, away from the GPU queue.</p>
-      <div class="life-grid">
-        <figure class="life-tile reveal">
-          <img src="assets/img/vincent-mont-aiguille.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Vincent hiking on a rocky ridge in the Vercors, Mont Aiguille behind him." />
-          <figcaption><strong>Hiking</strong> The Vercors, on the way to Mont Aiguille.</figcaption>
-        </figure>
-        <figure class="life-tile reveal">
-          <div class="life-tile__img">
-            <img src="assets/img/climbing.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Climbers on a tall limestone cliff under a deep blue sky; Vincent, in black, is near the top." />
-            <span class="life-tile__me" style="left: 48%; top: 27%;" aria-hidden="true"><span>me</span></span>
-          </div>
-          <figcaption><strong>Climbing</strong> New since this summer. That’s me in black, trying not to fall.</figcaption>
-        </figure>
-        <figure class="life-tile reveal">
-          <img src="assets/img/wok-sesame-beef.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="Sesame beef stir-fry with snow peas, carrots and onion in a wok." />
-          <figcaption><strong>Cooking</strong> Sesame beef stir-fry, straight from the wok. CAP cuisine certified.</figcaption>
-        </figure>
-      </div>
       <ul class="interests reveal">
         <li><strong>Calisthenics</strong>my longest-running habit</li>
-        <li><a class="interest-btn" href="#brain"><strong>Neuroscience</strong>make a neuron fire ⚡</a></li>
+        <li><a class="interest-btn" href="#obsessions"><strong>Neuroscience</strong>make a neuron fire ⚡</a></li>
         <li><button type="button" class="interest-btn" data-open-sky><strong>Space</strong>a lifelong fascination: open the sky ✦</button></li>
         <li><strong>Piano</strong>for the evenings</li>
         <li><strong>Running</strong>for the mornings</li>
