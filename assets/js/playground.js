@@ -34,11 +34,11 @@
     },
     dijkstra: {
       name: "Dijkstra",
-      desc: "<strong>Dijkstra’s algorithm</strong> always expands the closest unexplored neuron, so it is guaranteed to find the shortest path by distance.",
+      desc: "<strong>Dijkstra’s algorithm</strong> always expands the unexplored neuron that is cheapest to reach, so it is guaranteed to find the path with the lowest total cost.",
     },
     astar: {
       name: "A*",
-      desc: "<strong>A*</strong> is Dijkstra with a sense of direction: it favours neurons that lie towards the goal, finding the same shortest path while exploring less. (Its straight-line guess never overestimates, which is what keeps it exact.)",
+      desc: "<strong>A*</strong> is Dijkstra with a sense of direction: it favours neurons that lie towards the goal, finding the same cheapest path while exploring less. (Its straight-line guess never overestimates, which is what keeps it exact.)",
     },
     greedy: {
       name: "Greedy",
@@ -50,10 +50,18 @@
     },
   };
 
+  const MODE_NOTE = {
+    true: " Here the network is <strong>weighted</strong>: each connection costs its length, shown on the path once found.",
+    false: " Here the network is <strong>unweighted</strong>: every connection costs 1, so the fewest hops is also the cheapest path.",
+  };
+  const describe = (a) => ALGOS[a].desc + MODE_NOTE[weighted];
+
   let W = 0, H = 0, DPR = 1;
   let nodes = [], adj = [];
   let start = 0, goal = 0, nextPick = "start";
   let algo = "bfs";
+  let weighted = true;     // weighted: a connection costs its length; unweighted: every connection costs 1
+  let ratioW = 1, maxD = 1; // scales that keep A*'s straight-line guess from ever overestimating
   let anim = null;         // { result, shown, t0 }
   let visible = false, rafId = 0;
 
@@ -96,10 +104,15 @@
     adj = nodes.map(() => []);
     edges.forEach((e) => {
       const [a, b] = e.split("-").map(Number);
-      const w = dist(a, b);
-      adj[a].push({ to: b, w });
-      adj[b].push({ to: a, w });
+      const w = Math.max(1, Math.round(dist(a, b) / 10));   // whole-number weight: length ÷ 10
+      adj[a].push({ to: b, w, d: dist(a, b) });
+      adj[b].push({ to: a, w, d: dist(a, b) });
     });
+    // A* guess = straight-line distance × scale. Weighted: scale by the smallest weight-per-pixel of any
+    // edge, so rounding can never make the guess exceed the true remaining cost. Unweighted: divide by
+    // the longest edge, since each hop covers at most that much ground.
+    ratioW = Infinity; maxD = 0;
+    adj.forEach((l) => l.forEach((e) => { ratioW = Math.min(ratioW, e.w / e.d); maxD = Math.max(maxD, e.d); }));
     // Shuffle neighbour order once so DFS behaves like DFS, not like a sweep
     adj.forEach((list) => list.sort(() => Math.random() - 0.5));
 
@@ -115,7 +128,9 @@
     const n = nodes.length;
     const prev = new Array(n).fill(-1);
     const order = [];
-    const h = (i) => Math.hypot(nodes[i].x - nodes[goal].x, nodes[i].y - nodes[goal].y);
+    const straight = (i) => Math.hypot(nodes[i].x - nodes[goal].x, nodes[i].y - nodes[goal].y);
+    const h = (i) => straight(i) * (weighted ? ratioW : 1 / maxD);   // admissible and consistent in both modes
+    const cost = (e) => (weighted ? e.w : 1);
     const fromGoal = new Set();
     let path = null;
 
@@ -160,7 +175,7 @@
       seen[start] = true;
       while (open.length) {
         let bi = 0;
-        for (let k = 1; k < open.length; k++) if (h(open[k]) < h(open[bi])) bi = k;
+        for (let k = 1; k < open.length; k++) if (straight(open[k]) < straight(open[bi])) bi = k;
         const u = open.splice(bi, 1)[0];
         if (closed[u]) continue;
         closed[u] = true;
@@ -198,7 +213,8 @@
         done[u] = true;
         order.push(u);
         if (u === goal) break;
-        for (const { to, w } of adj[u]) {
+        for (const e of adj[u]) {
+          const to = e.to, w = cost(e);
           if (!done[to] && g[u] + w < g[to]) { g[to] = g[u] + w; prev[to] = u; }
         }
       }
@@ -209,10 +225,10 @@
       for (let v = goal; v !== -1; v = prev[v]) path.unshift(v);
       if (path[0] !== start) path.length = 0;
     }
-    let length = 0;
-    for (let i = 1; i < path.length; i++)
-      length += Math.hypot(nodes[path[i]].x - nodes[path[i - 1]].x, nodes[path[i]].y - nodes[path[i - 1]].y);
-    return { kind, order, path, fromGoal, hops: Math.max(0, path.length - 1), length };
+    // Path cost in the current mode (the sum of edge weights, or the hop count when unweighted)
+    let total = 0;
+    for (let i = 1; i < path.length; i++) total += cost(adj[path[i - 1]].find((e) => e.to === path[i]));
+    return { kind, order, path, fromGoal, hops: Math.max(0, path.length - 1), cost: total };
   }
 
   /* ───────── Drawing ───────── */
@@ -255,6 +271,22 @@
         ctx.lineTo(a.x + (b.x - a.x) * frac, a.y + (b.y - a.y) * frac);
       }
       ctx.stroke();
+
+      // Weighted mode: label each connection on the finished path with its cost
+      if (weighted && pathShown >= result.path.length) {
+        ctx.font = "500 11px 'JetBrains Mono', monospace";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        for (let i = 1; i < result.path.length; i++) {
+          const A = nodes[result.path[i - 1]], B = nodes[result.path[i]];
+          const w = adj[result.path[i - 1]].find((e) => e.to === result.path[i]).w;
+          const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, tw = ctx.measureText(String(w)).width + 8;
+          ctx.fillStyle = "rgba(5,6,15,0.85)";
+          ctx.fillRect(mx - tw / 2, my - 8, tw, 16);
+          ctx.fillStyle = rgba(C.path, 1);
+          ctx.fillText(String(w), mx, my + 0.5);
+        }
+        ctx.textAlign = "start"; ctx.textBaseline = "alphabetic";
+      }
 
       // A signal that keeps travelling along the finished path
       if (pathShown >= result.path.length && result.path.length > 1 && !reduceMotion) {
@@ -303,23 +335,21 @@
   function kick() { if (visible && !rafId) rafId = requestAnimationFrame(loop); }
 
   /* ───────── UI ───────── */
-  const fmtLen = (px) => Math.round(px / 10);
-
   function showIdle() {
-    descEl.innerHTML = ALGOS[algo].desc;
+    descEl.innerHTML = describe(algo);
     statsEl.innerHTML = `<span>${nodes.length} neurons · click to set ${nextPick}</span>`;
     kick();
   }
 
   function report(r) {
     statsEl.innerHTML = r.path.length
-      ? `explored <b>${r.order.length}</b> / ${nodes.length} neurons<br>path <b>${r.hops}</b> hops · length <b>${fmtLen(r.length)}</b>`
+      ? `explored <b>${r.order.length}</b> / ${nodes.length} neurons<br>path <b>${r.hops}</b> hops${weighted ? ` · total cost <b>${r.cost}</b>` : ""}`
       : `explored <b>${r.order.length}</b> neurons · no path`;
   }
 
   function run() {
     anim = { result: search(algo), t0: performance.now(), reported: false };
-    descEl.innerHTML = ALGOS[algo].desc;
+    descEl.innerHTML = describe(algo);
     statsEl.innerHTML = `<span>searching…</span>`;
     kick();
   }
@@ -329,18 +359,20 @@
     const maxSeen = Math.max(...results.map((r) => r.order.length));
     const fewestSeen = Math.min(...results.map((r) => r.order.length));
     const fewestHops = Math.min(...results.map((r) => r.hops));
-    const bestLen = Math.min(...results.map((r) => r.length));
+    const bestCost = Math.min(...results.map((r) => r.cost));
     const b = (cond, txt) => (cond ? `<b>${txt}</b>` : txt);
-    statsEl.innerHTML = `<div class="race">
-      <span></span><span></span><span class="race__h">explored</span><span class="race__h">hops</span><span class="race__h">distance</span>
+    statsEl.innerHTML = `<div class="race${weighted ? "" : " race--unweighted"}">
+      <span></span><span></span><span class="race__h">explored</span><span class="race__h">hops</span>${weighted ? '<span class="race__h">cost</span>' : ""}
       ${results.map((r) => `
       <span>${ALGOS[r.kind].name}</span>
       <span class="race__bar${r.order.length === fewestSeen ? " is-best" : ""}" style="width:${(r.order.length / maxSeen) * 100}%"></span>
       <span>${r.order.length}</span>
       <span>${b(r.hops === fewestHops, r.hops)}</span>
-      <span>${b(Math.abs(r.length - bestLen) < 1e-6, Math.abs(r.length - bestLen) < 1e-6 ? "shortest" : `+${Math.max(1, Math.round((r.length / bestLen - 1) * 100))}%`)}</span>`).join("")}
+      ${weighted ? `<span>${b(r.cost === bestCost, r.cost)}</span>` : ""}`).join("")}
     </div>`;
-    descEl.innerHTML = "Same start, same goal. <strong>Bold</strong> marks the best in each column. BFS and bidirectional always find the fewest hops; Dijkstra and A* always find the shortest distance (A* by exploring less); greedy is frugal but carries no guarantee, and DFS wanders.";
+    descEl.innerHTML = weighted
+      ? "Same start, same goal, <strong>weighted</strong> network. <strong>Bold</strong> marks the best in each column. BFS and bidirectional always find the fewest hops; Dijkstra and A* always find the lowest cost (A* by exploring less); greedy is frugal but carries no guarantee, and DFS wanders."
+      : "Same start, same goal, <strong>unweighted</strong> network: every connection costs 1. BFS, bidirectional, Dijkstra and A* all find the fewest hops; they differ only in how much they explore. Greedy and DFS carry no guarantee.";
     const shown = results.find((r) => r.kind === algo);
     anim = { result: shown, t0: performance.now() - 1e6, reported: true };
     kick();
@@ -355,6 +387,14 @@
   document.getElementById("pgRun").addEventListener("click", run);
   document.getElementById("pgRace").addEventListener("click", race);
   document.getElementById("pgNew").addEventListener("click", generate);
+  const modeBtns = [...document.querySelectorAll("#pgMode button")];
+  modeBtns.forEach((btn) => btn.addEventListener("click", () => {
+    weighted = btn.dataset.mode === "weighted";
+    modeBtns.forEach((x) => x.setAttribute("aria-checked", String(x === btn)));
+    canvas.classList.toggle("is-unweighted", !weighted);
+    anim = null;
+    showIdle();
+  }));
 
   canvas.addEventListener("click", (e) => {
     const r = canvas.getBoundingClientRect();

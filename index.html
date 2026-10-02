@@ -339,7 +339,9 @@
       <p class="subhead__intro reveal">
         A browser version of my <a class="link" href="https://github.com/VincentO-Luasa/graph_search_algorithms" target="_blank" rel="noopener">graph search project</a>,
         running on a network of neurons. Click a neuron to set the start, another for the goal, then
-        pick an algorithm and watch the signal find its way.
+        pick an algorithm and watch the signal find its way. The network is <strong>weighted</strong> by
+        default (each connection costs its length); switch to <strong>unweighted</strong> to make every
+        connection cost 1, and see which algorithms change their answer.
       </p>
       <div class="pg reveal">
         <div class="pg__bar">
@@ -350,6 +352,10 @@
             <button type="button" role="radio" aria-checked="false" data-algo="astar">A*</button>
             <button type="button" role="radio" aria-checked="false" data-algo="greedy">Greedy</button>
             <button type="button" role="radio" aria-checked="false" data-algo="bidi">Bidirectional</button>
+          </div>
+          <div class="seg seg--mode" role="radiogroup" aria-label="Edge costs" id="pgMode">
+            <button type="button" role="radio" aria-checked="true" data-mode="weighted" title="Each connection costs its length">Weighted</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="unweighted" title="Every connection costs 1">Unweighted</button>
           </div>
           <div class="pg__actions">
             <button type="button" class="chip-btn chip-btn--accent" id="pgRun">Run ▸</button>
