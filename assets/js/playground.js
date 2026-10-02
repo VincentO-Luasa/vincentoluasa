@@ -26,7 +26,7 @@
   const ALGOS = {
     bfs: {
       name: "BFS",
-      desc: "<strong>Breadth-first search</strong> explores in rings, like a ripple spreading from the start. It finds the path with the fewest hops, but ignores how long each connection is.",
+      desc: "<strong>Breadth-first search</strong> explores in rings, like a ripple spreading from the start. It is guaranteed to find the path with the <em>fewest hops</em>, but ignores how long each connection is, so that path is not always the shortest in distance.",
     },
     dfs: {
       name: "DFS",
@@ -38,7 +38,7 @@
     },
     astar: {
       name: "A*",
-      desc: "<strong>A*</strong> is Dijkstra with a sense of direction: it favours neurons that lie towards the goal, finding the same shortest path while exploring far less.",
+      desc: "<strong>A*</strong> is Dijkstra with a sense of direction: it favours neurons that lie towards the goal, finding the same shortest path while exploring less. (Its straight-line guess never overestimates, which is what keeps it exact.)",
     },
     greedy: {
       name: "Greedy",
@@ -46,7 +46,7 @@
     },
     bidi: {
       name: "Bidirectional",
-      desc: "<strong>Bidirectional search</strong> launches two breadth-first waves, one from each end (blue from the start, violet from the goal), and stops as soon as they meet. Two small circles cover far less ground than one big one.",
+      desc: "<strong>Bidirectional search</strong> launches two breadth-first waves, one from each end (blue from the start, violet from the goal), layer by layer, and stops when they meet. Like BFS it guarantees the <em>fewest hops</em>, while two small circles usually cover less ground than one big one.",
     },
   };
 
@@ -120,33 +120,38 @@
     let path = null;
 
     if (kind === "bidi") {
-      // Two BFS waves, expanded alternately, until one reaches a node the other has seen
+      // Two BFS waves, one from each end. Expand one whole layer at a time (the smaller
+      // frontier first); when the waves touch, keep the best meeting over that entire
+      // layer. Stopping at the first contact can miss the shortest route by one hop.
       const prevG = new Array(n).fill(-1);
-      const seenS = new Array(n).fill(false), seenG = new Array(n).fill(false);
-      const qS = [start], qG = [goal];
-      seenS[start] = seenG[goal] = true;
-      let meet = start === goal ? start : -1;
-      while (meet < 0 && (qS.length || qG.length)) {
-        for (const side of ["S", "G"]) {
-          const q = side === "S" ? qS : qG;
-          if (meet >= 0 || !q.length) continue;
-          const u = q.shift();
-          order.push(u);
-          if (side === "G") fromGoal.add(u);
+      const dS = new Array(n).fill(Infinity), dG = new Array(n).fill(Infinity);
+      dS[start] = 0; dG[goal] = 0;
+      let fS = [start], fG = [goal];
+      let best = start === goal ? { a: start, b: start, len: 0 } : null;
+      while (!best && fS.length && fG.length) {
+        const fromS = fS.length <= fG.length;
+        const dMine = fromS ? dS : dG, dOther = fromS ? dG : dS, prevMine = fromS ? prev : prevG;
+        const next = [];
+        for (const u of fromS ? fS : fG) {
+          order.push(u);                               // "explored" = expanded, as for the others
+          if (!fromS) fromGoal.add(u);
           for (const { to } of adj[u]) {
-            const mine = side === "S" ? seenS : seenG, other = side === "S" ? seenG : seenS;
-            if (mine[to]) continue;
-            mine[to] = true;
-            (side === "S" ? prev : prevG)[to] = u;
-            if (other[to]) { meet = to; order.push(to); break; }
-            q.push(to);
+            if (dOther[to] !== Infinity) {
+              const len = dMine[u] + 1 + dOther[to];
+              if (!best || len < best.len) best = fromS ? { a: u, b: to, len } : { a: to, b: u, len };
+            }
+            if (dMine[to] === Infinity) {
+              dMine[to] = dMine[u] + 1; prevMine[to] = u; next.push(to);
+            }
           }
         }
+        if (fromS) fS = next; else fG = next;
       }
       path = [];
-      if (meet >= 0) {
-        for (let v = meet; v !== -1; v = prev[v]) path.unshift(v);
-        for (let v = prevG[meet]; v !== -1; v = prevG[v]) path.push(v);
+      if (best) {
+        // a is reached from the start, b from the goal, and a–b is an edge (or a === b)
+        for (let v = best.a; v !== -1; v = prev[v]) path.unshift(v);
+        for (let v = best.a === best.b ? prevG[best.b] : best.b; v !== -1; v = prevG[v]) path.push(v);
       }
     } else if (kind === "greedy") {
       // Always expand the open neuron with the smallest straight-line distance to the goal
@@ -322,17 +327,20 @@
   function race() {
     const results = Object.keys(ALGOS).map(search);
     const maxSeen = Math.max(...results.map((r) => r.order.length));
+    const fewestSeen = Math.min(...results.map((r) => r.order.length));
+    const fewestHops = Math.min(...results.map((r) => r.hops));
     const bestLen = Math.min(...results.map((r) => r.length));
-    const fewest = Math.min(...results.map((r) => r.order.length));
+    const b = (cond, txt) => (cond ? `<b>${txt}</b>` : txt);
     statsEl.innerHTML = `<div class="race">
-      <span></span><span></span><span class="race__h">explored</span><span class="race__h">path</span>
+      <span></span><span></span><span class="race__h">explored</span><span class="race__h">hops</span><span class="race__h">distance</span>
       ${results.map((r) => `
       <span>${ALGOS[r.kind].name}</span>
-      <span class="race__bar${r.order.length === fewest ? " is-best" : ""}" style="width:${(r.order.length / maxSeen) * 100}%"></span>
+      <span class="race__bar${r.order.length === fewestSeen ? " is-best" : ""}" style="width:${(r.order.length / maxSeen) * 100}%"></span>
       <span>${r.order.length}</span>
-      <span>${Math.abs(r.length - bestLen) < 0.5 ? "<b>shortest</b>" : `+${Math.round((r.length / bestLen - 1) * 100)}%`}</span>`).join("")}
+      <span>${b(r.hops === fewestHops, r.hops)}</span>
+      <span>${b(Math.abs(r.length - bestLen) < 1e-6, Math.abs(r.length - bestLen) < 1e-6 ? "shortest" : `+${Math.max(1, Math.round((r.length / bestLen - 1) * 100))}%`)}</span>`).join("")}
     </div>`;
-    descEl.innerHTML = "Same start, same goal. Bars show how many neurons each algorithm had to explore (green = fewest). Greedy is usually the most frugal but pays with longer paths, A* finds the shortest path cheaply, bidirectional halves BFS’s work, and DFS wanders.";
+    descEl.innerHTML = "Same start, same goal. <strong>Bold</strong> marks the best in each column. BFS and bidirectional always find the fewest hops; Dijkstra and A* always find the shortest distance (A* by exploring less); greedy is frugal but carries no guarantee, and DFS wanders.";
     const shown = results.find((r) => r.kind === algo);
     anim = { result: shown, t0: performance.now() - 1e6, reported: true };
     kick();
